@@ -24,8 +24,13 @@ interface PhotoSubmission {
   createdAt: string;
   submittedBy: string | null;
   game: { id: string; name: string; slug: string };
-  parameter: { id: string; name: string };
-  qualityLevel: { id: string; level: string };
+  parameter: { id: string; name: string } | null;
+  qualityLevel: { id: string; level: string } | null;
+  customParameter?: {
+    name: string;
+    options: string[];
+    selectedOption: string;
+  };
 }
 
 export default function AdminSubmissionsDashboard() {
@@ -221,7 +226,16 @@ export default function AdminSubmissionsDashboard() {
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{photo.game.name}</p>
                       <p className="text-sm text-gray-500 truncate">
-                        {photo.parameter.name} • {photo.qualityLevel.level}
+                        {photo.customParameter ? (
+                          <>
+                            {photo.customParameter.name} • {photo.customParameter.selectedOption}
+                            <span className="ml-1 text-purple-400">(Custom)</span>
+                          </>
+                        ) : (
+                          <>
+                            {photo.parameter?.name || '-'} • {photo.qualityLevel?.level || '-'}
+                          </>
+                        )}
                       </p>
                     </div>
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-500/20 text-yellow-400">

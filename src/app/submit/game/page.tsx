@@ -17,15 +17,14 @@ export default function GameSubmissionForm() {
   const [name, setName] = useState('');
   const [releaseYear, setReleaseYear] = useState('');
   const [coverImageUrl, setCoverImageUrl] = useState('');
-  const [submitterEmail, setSubmitterEmail] = useState('');
 
   // Validation errors
-  const [errors, setErrors] = useState<{ name?: string; releaseYear?: string; submitterEmail?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; releaseYear?: string }>({});
 
   const currentYear = new Date().getFullYear();
 
   const validate = (): boolean => {
-    const newErrors: { name?: string; releaseYear?: string; submitterEmail?: string } = {};
+    const newErrors: { name?: string; releaseYear?: string } = {};
 
     if (!name.trim()) {
       newErrors.name = 'Game name is required';
@@ -36,10 +35,6 @@ export default function GameSubmissionForm() {
       if (isNaN(year) || year < 1970 || year > currentYear + 5) {
         newErrors.releaseYear = `Year must be between 1970 and ${currentYear + 5}`;
       }
-    }
-
-    if (submitterEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submitterEmail)) {
-      newErrors.submitterEmail = 'Please enter a valid email address';
     }
 
     setErrors(newErrors);
@@ -64,7 +59,6 @@ export default function GameSubmissionForm() {
           name: name.trim(),
           releaseYear: releaseYear ? parseInt(releaseYear) : undefined,
           coverImageUrl: coverImageUrl || undefined,
-          submittedBy: submitterEmail.trim() || undefined,
         }),
       });
 
@@ -128,7 +122,6 @@ export default function GameSubmissionForm() {
               setName('');
               setReleaseYear('');
               setCoverImageUrl('');
-              setSubmitterEmail('');
             }}>
               Submit Another Game
             </Button>
@@ -203,24 +196,6 @@ export default function GameSubmissionForm() {
             folder="covers"
           />
         </div>
-
-        {/* Submitter Email */}
-        <Input
-          label="Your Email (optional)"
-          name="submitterEmail"
-          type="email"
-          value={submitterEmail}
-          onChange={(e) => {
-            setSubmitterEmail(e.target.value);
-            if (errors.submitterEmail) setErrors((prev) => ({ ...prev, submitterEmail: undefined }));
-          }}
-          error={errors.submitterEmail}
-          placeholder="your@email.com"
-          disabled={loading}
-        />
-        <p className="text-xs text-gray-500 -mt-4">
-          Provide your email to receive notifications about your submission status
-        </p>
 
         {/* Error Message */}
         {submitError && (

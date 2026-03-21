@@ -81,7 +81,7 @@ export default function AdminLayout({
       }
       if (photosRes.ok) {
         const photosData = await photosRes.json();
-        count += photosData.length || 0;
+        count += photosData.total || photosData.submissions?.length || 0;
       }
       
       setPendingCount(count);

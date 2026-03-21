@@ -62,14 +62,22 @@ export async function GET(
     }
 
     // Transform to include parsed custom parameter data
+    let parsedOptions: string[] = [];
+    try {
+      parsedOptions = submission.customParameterOptions 
+        ? JSON.parse(submission.customParameterOptions) 
+        : [];
+    } catch (e) {
+      console.error('Failed to parse customParameterOptions:', e);
+      parsedOptions = [];
+    }
+    
     const transformedSubmission = {
       ...submission,
       customParameter: submission.customParameterName ? {
         name: submission.customParameterName,
-        options: submission.customParameterOptions 
-          ? JSON.parse(submission.customParameterOptions) 
-          : [],
-        selectedOption: submission.customParameterSelected,
+        options: parsedOptions,
+        selectedOption: submission.customParameterSelected || '',
       } : undefined,
     };
 

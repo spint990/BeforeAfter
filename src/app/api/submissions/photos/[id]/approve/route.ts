@@ -26,7 +26,27 @@ export async function POST(
       );
     }
 
-    // Verify that the game, parameter, and quality level still exist
+    // Check if this is a custom parameter submission (no parameterId/qualityLevelId)
+    const isCustomParameter = submission.customParameterName && !submission.parameterId;
+
+    if (isCustomParameter) {
+      // For custom parameter submissions, just mark as approved without creating a Photo
+      // Custom parameter submissions are stored for reference but don't become Photos
+      await prisma.photoSubmission.update({
+        where: { id },
+        data: {
+          status: "APPROVED",
+          reviewedAt: new Date(),
+        },
+      });
+
+      return NextResponse.json({
+        message: "Custom parameter photo submission approved",
+        note: "Custom parameter submissions are approved for reference but not added to the Photo database",
+      });
+    }
+
+    // Verify that the game, parameter, and quality level still exist for standard submissions
     const [game, parameter, qualityLevel] = await Promise.all([
       prisma.game.findUnique({ where: { id: submission.gameId } }),
       submission.parameterId ? prisma.parameter.findUnique({ where: { id: submission.parameterId } }) : null,
@@ -50,8 +70,8 @@ export async function POST(
       const photo = await tx.photo.create({
         data: {
           gameId: submission.gameId,
-          parameterId: submission.parameterId,
-          qualityLevelId: submission.qualityLevelId,
+          parameterId: submission.parameterId!,
+          qualityLevelId: submission.qualityLevelId!,
           imageUrl: submission.imageUrl,
           description: submission.description,
         },

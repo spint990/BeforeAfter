@@ -43,7 +43,7 @@ export async function POST(
       return NextResponse.json({ error: "Associated quality level not found" }, { status: 404 });
     }
 
-    // Create the photo and update submission in a transaction
+    // Create the photo and delete submission in a transaction
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = await prisma.$transaction(async (tx: any) => {
       // Create new Photo from submission data
@@ -57,23 +57,17 @@ export async function POST(
         },
       });
 
-      // Update submission status to APPROVED and link to created photo
-      const updatedSubmission = await tx.photoSubmission.update({
+      // Delete the submission after approval to keep only published photos
+      await tx.photoSubmission.delete({
         where: { id },
-        data: {
-          status: "APPROVED",
-          reviewedAt: new Date(),
-          photoId: photo.id,
-        },
       });
 
-      return { photo, submission: updatedSubmission };
+      return { photo };
     });
 
     return NextResponse.json({
-      message: "Photo submission approved successfully",
+      message: "Photo submission approved and deleted",
       photo: result.photo,
-      submission: result.submission,
     });
   } catch (error) {
     logError("Error approving photo submission:", error);

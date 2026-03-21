@@ -227,6 +227,39 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Check if a photo already exists for this game/parameter/qualityLevel combination
+      const existingPhoto = await prisma.photo.findFirst({
+        where: {
+          gameId: validatedData.gameId,
+          parameterId: validatedData.parameterId,
+          qualityLevelId: validatedData.qualityLevelId,
+        },
+      });
+
+      if (existingPhoto) {
+        return NextResponse.json(
+          { error: "A photo already exists for this game, parameter, and quality level combination" },
+          { status: 400 }
+        );
+      }
+
+      // Check if a submission already exists for this game/parameter/qualityLevel combination
+      const existingSubmission = await prisma.photoSubmission.findFirst({
+        where: {
+          gameId: validatedData.gameId,
+          parameterId: validatedData.parameterId,
+          qualityLevelId: validatedData.qualityLevelId,
+          status: "PENDING",
+        },
+      });
+
+      if (existingSubmission) {
+        return NextResponse.json(
+          { error: "A submission already exists for this game, parameter, and quality level combination" },
+          { status: 400 }
+        );
+      }
+
       const submission = await prisma.photoSubmission.create({
         data: {
           gameId: validatedData.gameId,

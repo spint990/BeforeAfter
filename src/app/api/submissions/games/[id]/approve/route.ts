@@ -39,7 +39,7 @@ export async function POST(
       );
     }
 
-    // Create the game and update submission in a transaction
+    // Create the game and delete submission in a transaction
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = await prisma.$transaction(async (tx: any) => {
       // Create new Game from submission data
@@ -51,17 +51,12 @@ export async function POST(
         },
       });
 
-      // Update submission status to APPROVED and link to created game
-      const updatedSubmission = await tx.gameSubmission.update({
+      // Delete the submission after approval to keep only published games
+      await tx.gameSubmission.delete({
         where: { id },
-        data: {
-          status: "APPROVED",
-          reviewedAt: new Date(),
-          gameId: game.id,
-        },
       });
 
-      return { game, submission: updatedSubmission };
+      return { game };
     });
 
     // Revalidate the games pages to show the new game
@@ -70,9 +65,8 @@ export async function POST(
     revalidateTag("games");
 
     return NextResponse.json({
-      message: "Game submission approved successfully",
+      message: "Game submission approved and deleted",
       game: result.game,
-      submission: result.submission,
     });
   } catch (error) {
     logError("Error approving game submission:", error);

@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model Game {
+  id               String            @id @default(cuid())
+  name             String
+  slug             String            @unique
+  coverImage       String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  parameters       Parameter[]
+  gameSubmissions  GameSubmission[]
+  photoSubmissions PhotoSubmission[]
+  photos           Photo[]
+  
+  @@map("games")
+}
+
+model Parameter {
+  id               String            @id @default(cuid())
+  gameId           String
+  name             String
+  slug             String
+  game             Game              @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  qualityLevels    QualityLevel[]
+  photoSubmissions PhotoSubmission[]
+  photos           Photo[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  
+  @@unique([gameId, slug])
+  @@map("parameters")
+}
+
+model QualityLevel {
+  id               String            @id @default(cuid())
+  parameterId      String
+  level            String
+  imageUrl         String
+  parameter        Parameter         @relation(fields: [parameterId], references: [id], onDelete: Cascade)
+  photoSubmissions PhotoSubmission[]
+  photos           Photo[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  
+  @@unique([parameterId, level])
+  @@map("quality_levels")
+}
+
+model Photo {
+  id              String           @id @default(cuid())
+  gameId          String
+  game            Game             @relation(fields: [gameId], references: [id])
+  parameterId     String
+  parameter       Parameter        @relation(fields: [parameterId], references: [id])
+  qualityLevelId  String
+  qualityLevel    QualityLevel     @relation(fields: [qualityLevelId], references: [id])
+  imageUrl        String
+  description     String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  submission      PhotoSubmission?
+  
+  @@map("photos")
+}
+
+model GameSubmission {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String?
+  developer       String?
+  publisher       String?
+  releaseYear     Int?
+  coverImageUrl   String?
+  submittedBy     String?  // Optional email/name
+  status          String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  reviewedAt      DateTime?
+  reviewedBy      String?  // Admin user ID (for future auth)
+  rejectionReason String?
+  gameId          String?  // Link to created game if approved
+  game            Game?    @relation(fields: [gameId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("game_submissions")
+}
+
+model PhotoSubmission {
+  id              String    @id @default(cuid())
+  gameId          String
+  game            Game      @relation(fields: [gameId], references: [id])
+  parameterId     String?
+  parameter       Parameter? @relation(fields: [parameterId], references: [id])
+  qualityLevelId  String?
+  qualityLevel    QualityLevel? @relation(fields: [qualityLevelId], references: [id])
+  imageUrl        String
+  description     String?
+  submittedBy     String?
+  status          String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  rejectionReason String?
+  photoId         String?   @unique // Link to created photo if approved
+  photo           Photo?    @relation(fields: [photoId], references: [id])
+  // Custom parameter fields
+  customParameterName     String?
+  customParameterOptions  String?  // JSON string of options array
+  customParameterSelected String?  // Selected option
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@map("photo_submissions")
+}
+
+model QuickComparison {
+  id           String   @id @default(cuid())
+  beforeUrl    String
+  afterUrl     String
+  beforeLabel  String   @default("Avant")
+  afterLabel   String   @default("Après")
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  
+  @@map("quick_comparisons")
+}

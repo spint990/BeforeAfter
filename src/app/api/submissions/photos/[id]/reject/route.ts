@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 import { logError } from "@/lib/error-utils";
+import { unlink } from "fs/promises";
+import { join } from "path";
 
 // Rejection validation schema
 const rejectPhotoSubmissionSchema = z.object({
   reason: z.string().min(1, "Rejection reason is required").max(1000, "Reason is too long"),
 });
 
-// POST /api/submissions/photos/[id]/reject - Reject a photo submission
+// POST /api/submissions/photos/[id]/reject - Reject a photo submission (deletes it from DB)
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -34,19 +36,25 @@ export async function POST(
       );
     }
 
-    // Update submission status to REJECTED and store reason
-    const updatedSubmission = await prisma.photoSubmission.update({
+    // Delete the associated image file if it exists
+    if (submission.imageUrl) {
+      try {
+        const imagePath = join(process.cwd(), "public", submission.imageUrl);
+        await unlink(imagePath);
+      } catch (fileError) {
+        // Log error but don't fail the request if file deletion fails
+        logError("Warning: Could not delete image file:", fileError);
+      }
+    }
+
+    // Delete the submission from the database to optimize storage
+    await prisma.photoSubmission.delete({
       where: { id },
-      data: {
-        status: "REJECTED",
-        rejectionReason: validatedData.reason,
-        reviewedAt: new Date(),
-      },
     });
 
     return NextResponse.json({
-      message: "Photo submission rejected",
-      submission: updatedSubmission,
+      message: "Photo submission rejected and deleted",
+      rejectionReason: validatedData.reason,
     });
   } catch (error) {
     logError("Error rejecting photo submission:", error);

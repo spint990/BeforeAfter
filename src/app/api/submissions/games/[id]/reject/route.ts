@@ -8,7 +8,7 @@ const rejectGameSubmissionSchema = z.object({
   reason: z.string().min(1, "Rejection reason is required").max(1000, "Reason is too long"),
 });
 
-// POST /api/submissions/games/[id]/reject - Reject a game submission
+// POST /api/submissions/games/[id]/reject - Reject a game submission (deletes it from DB)
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -34,19 +34,14 @@ export async function POST(
       );
     }
 
-    // Update submission status to REJECTED and store reason
-    const updatedSubmission = await prisma.gameSubmission.update({
+    // Delete the submission from the database to optimize storage
+    await prisma.gameSubmission.delete({
       where: { id },
-      data: {
-        status: "REJECTED",
-        rejectionReason: validatedData.reason,
-        reviewedAt: new Date(),
-      },
     });
 
     return NextResponse.json({
-      message: "Game submission rejected",
-      submission: updatedSubmission,
+      message: "Game submission rejected and deleted",
+      rejectionReason: validatedData.reason,
     });
   } catch (error) {
     logError("Error rejecting game submission:", error);

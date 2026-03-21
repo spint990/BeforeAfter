@@ -28,17 +28,17 @@ export async function POST(
     // Verify that the game, parameter, and quality level still exist
     const [game, parameter, qualityLevel] = await Promise.all([
       prisma.game.findUnique({ where: { id: submission.gameId } }),
-      prisma.parameter.findUnique({ where: { id: submission.parameterId } }),
-      prisma.qualityLevel.findUnique({ where: { id: submission.qualityLevelId } }),
+      submission.parameterId ? prisma.parameter.findUnique({ where: { id: submission.parameterId } }) : null,
+      submission.qualityLevelId ? prisma.qualityLevel.findUnique({ where: { id: submission.qualityLevelId } }) : null,
     ]);
 
     if (!game) {
       return NextResponse.json({ error: "Associated game not found" }, { status: 404 });
     }
-    if (!parameter) {
+    if (submission.parameterId && !parameter) {
       return NextResponse.json({ error: "Associated parameter not found" }, { status: 404 });
     }
-    if (!qualityLevel) {
+    if (submission.qualityLevelId && !qualityLevel) {
       return NextResponse.json({ error: "Associated quality level not found" }, { status: 404 });
     }
 

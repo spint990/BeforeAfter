@@ -1,19 +1,32 @@
 import Link from 'next/link';
 import GameCard from '@/components/games/GameCard';
+import { prisma } from '@/lib/prisma';
 
-// Fetch all games server-side
+// Fetch all games server-side (using Prisma directly)
 async function getGames() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const response = await fetch(`${baseUrl}/api/games`, {
-    cache: 'no-store',
-  });
-  
-  if (!response.ok) {
+  try {
+    const games = await prisma.game.findMany({
+      include: {
+        parameters: {
+          include: {
+            _count: {
+              select: { qualityLevels: true },
+            },
+          },
+        },
+        _count: {
+          select: { parameters: true },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return games;
+  } catch (error) {
+    console.error('Error fetching games:', error);
     return [];
   }
-  
-  const { games } = await response.json();
-  return games;
 }
 
 export default async function GamesPage() {

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import ComparisonView from '@/components/comparison/ComparisonView';
+import { prisma } from '@/lib/prisma';
 
 interface PageProps {
   params: Promise<{
@@ -7,7 +8,7 @@ interface PageProps {
   }>;
 }
 
-// Game response type from API
+// Game response type
 interface GameResponse {
   id: string;
   name: string;
@@ -25,21 +26,30 @@ interface GameResponse {
   }>;
 }
 
+// Fetch game by slug using Prisma directly
 async function getGame(slug: string): Promise<GameResponse | null> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/games/${slug}`, {
-      cache: 'no-store',
+    const game = await prisma.game.findFirst({
+      where: {
+        OR: [{ id: slug }, { slug: slug }],
+      },
+      include: {
+        parameters: {
+          include: {
+            qualityLevels: {
+              orderBy: {
+                level: 'asc',
+              },
+            },
+          },
+          orderBy: {
+            name: 'asc',
+          },
+        },
+      },
     });
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`Failed to fetch game: ${response.status}`);
-    }
-
-    return response.json();
+    return game;
   } catch (error) {
     console.error('Error fetching game:', error);
     return null;

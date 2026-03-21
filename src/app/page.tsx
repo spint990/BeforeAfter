@@ -1,34 +1,61 @@
 import Link from 'next/link';
 import GameCard from '@/components/games/GameCard';
+import { prisma } from '@/lib/prisma';
 
-// Fetch featured games server-side
+// Fetch featured games server-side (using Prisma directly)
 async function getFeaturedGames() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const response = await fetch(`${baseUrl}/api/games?take=4`, {
-    cache: 'no-store',
-  });
-  
-  if (!response.ok) {
+  try {
+    const games = await prisma.game.findMany({
+      take: 4,
+      include: {
+        parameters: {
+          include: {
+            _count: {
+              select: { qualityLevels: true },
+            },
+          },
+        },
+        _count: {
+          select: { parameters: true },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return games;
+  } catch (error) {
+    console.error('Error fetching featured games:', error);
     return [];
   }
-  
-  const { games } = await response.json();
-  return games;
 }
 
-// Fetch latest games server-side
+// Fetch latest games server-side (using Prisma directly)
 async function getLatestGames() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const response = await fetch(`${baseUrl}/api/games?take=8`, {
-    cache: 'no-store',
-  });
-  
-  if (!response.ok) {
+  try {
+    const games = await prisma.game.findMany({
+      take: 8,
+      include: {
+        parameters: {
+          include: {
+            _count: {
+              select: { qualityLevels: true },
+            },
+          },
+        },
+        _count: {
+          select: { parameters: true },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return games;
+  } catch (error) {
+    console.error('Error fetching latest games:', error);
     return [];
   }
-  
-  const { games } = await response.json();
-  return games;
 }
 
 export default async function Home() {

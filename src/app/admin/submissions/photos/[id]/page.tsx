@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import ImageComparisonSlider from '@/components/comparison/ImageComparisonSlider';
 import Button from '@/components/ui/Button';
@@ -41,8 +41,8 @@ interface PhotoSubmission {
   };
 }
 
-export default function PhotoSubmissionReviewPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
+export default function PhotoSubmissionReviewPage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
   const [submission, setSubmission] = useState<PhotoSubmission | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,11 +53,11 @@ export default function PhotoSubmissionReviewPage({ params }: { params: Promise<
 
   useEffect(() => {
     fetchSubmission();
-  }, [resolvedParams.id]);
+  }, [params.id]);
 
   const fetchSubmission = async () => {
     try {
-      const response = await fetch(`/api/submissions/photos/${resolvedParams.id}`);
+      const response = await fetch(`/api/submissions/photos/${params.id}`);
       if (!response.ok) {
         router.push('/admin/submissions/photos');
         return;
@@ -74,7 +74,7 @@ export default function PhotoSubmissionReviewPage({ params }: { params: Promise<
   const handleApprove = async () => {
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/submissions/photos/${resolvedParams.id}/approve`, {
+      const response = await fetch(`/api/submissions/photos/${params.id}/approve`, {
         method: 'POST',
       });
 
@@ -100,7 +100,7 @@ export default function PhotoSubmissionReviewPage({ params }: { params: Promise<
 
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/submissions/photos/${resolvedParams.id}/reject`, {
+      const response = await fetch(`/api/submissions/photos/${params.id}/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import Button from '@/components/ui/Button';
@@ -27,8 +27,8 @@ interface GameSubmission {
   } | null;
 }
 
-export default function GameSubmissionReviewPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
+export default function GameSubmissionReviewPage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
   const [submission, setSubmission] = useState<GameSubmission | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,11 +38,11 @@ export default function GameSubmissionReviewPage({ params }: { params: Promise<{
 
   useEffect(() => {
     fetchSubmission();
-  }, [resolvedParams.id]);
+  }, [params.id]);
 
   const fetchSubmission = async () => {
     try {
-      const response = await fetch(`/api/submissions/games/${resolvedParams.id}`);
+      const response = await fetch(`/api/submissions/games/${params.id}`);
       if (!response.ok) {
         router.push('/admin/submissions/games');
         return;
@@ -59,7 +59,7 @@ export default function GameSubmissionReviewPage({ params }: { params: Promise<{
   const handleApprove = async () => {
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/submissions/games/${resolvedParams.id}/approve`, {
+      const response = await fetch(`/api/submissions/games/${params.id}/approve`, {
         method: 'POST',
       });
 
@@ -85,7 +85,7 @@ export default function GameSubmissionReviewPage({ params }: { params: Promise<{
 
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/submissions/games/${resolvedParams.id}/reject`, {
+      const response = await fetch(`/api/submissions/games/${params.id}/reject`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

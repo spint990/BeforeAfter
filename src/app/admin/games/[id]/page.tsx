@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import AdminGameForm from '@/components/admin/AdminGameForm';
 import ParameterManager from '@/components/admin/ParameterManager';
@@ -27,8 +27,8 @@ interface Game {
   coverImage: string | null;
 }
 
-export default function EditGamePage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
+export default function EditGamePage() {
+  const params = useParams<{ id: string }>();
   const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [parameters, setParameters] = useState<Parameter[]>([]);
@@ -40,12 +40,12 @@ export default function EditGamePage({ params }: { params: Promise<{ id: string 
 
   useEffect(() => {
     fetchGameData();
-  }, [resolvedParams.id]);
+  }, [params.id]);
 
   const fetchGameData = async () => {
     try {
       // Fetch game details
-      const gameResponse = await fetch(`/api/games/${resolvedParams.id}`);
+      const gameResponse = await fetch(`/api/games/${params.id}`);
       if (!gameResponse.ok) {
         router.push('/admin/games');
         return;
@@ -54,7 +54,7 @@ export default function EditGamePage({ params }: { params: Promise<{ id: string 
       setGame(gameData);
 
       // Fetch parameters with quality levels
-      const paramsResponse = await fetch(`/api/parameters?gameId=${resolvedParams.id}`);
+      const paramsResponse = await fetch(`/api/parameters?gameId=${params.id}`);
       const paramsData = await paramsResponse.json();
       
       // Fetch quality levels for each parameter
@@ -77,7 +77,7 @@ export default function EditGamePage({ params }: { params: Promise<{ id: string 
   const handleUpdateGame = async (data: { name: string; slug: string; coverImage?: string }) => {
     setSaving(true);
     try {
-      const response = await fetch(`/api/games/${resolvedParams.id}`, {
+      const response = await fetch(`/api/games/${params.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ export default function EditGamePage({ params }: { params: Promise<{ id: string 
   const handleDeleteGame = async () => {
     setDeleting(true);
     try {
-      const response = await fetch(`/api/games/${resolvedParams.id}`, {
+      const response = await fetch(`/api/games/${params.id}`, {
         method: 'DELETE',
       });
 

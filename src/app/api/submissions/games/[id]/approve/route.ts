@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { logError } from "@/lib/error-utils";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 // POST /api/submissions/games/[id]/approve - Approve a game submission
 export async function POST(
@@ -62,6 +63,11 @@ export async function POST(
 
       return { game, submission: updatedSubmission };
     });
+
+    // Revalidate the games pages to show the new game
+    revalidatePath("/games");
+    revalidatePath("/", "layout");
+    revalidateTag("games");
 
     return NextResponse.json({
       message: "Game submission approved successfully",

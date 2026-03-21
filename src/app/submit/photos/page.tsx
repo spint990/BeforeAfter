@@ -28,6 +28,12 @@ interface QualityLevel {
   parameterId: string;
 }
 
+// Track image for each custom option
+interface OptionImage {
+  option: string;
+  imageUrl: string;
+}
+
 export default function PhotoSubmissionForm() {
   const router = useRouter();
   
@@ -58,6 +64,9 @@ export default function PhotoSubmissionForm() {
   const [customParameterName, setCustomParameterName] = useState('');
   const [customParameterOptions, setCustomParameterOptions] = useState<string[]>(['']);
   const [selectedCustomOption, setSelectedCustomOption] = useState('');
+  
+  // Track images for each custom option - maps option name to image URL
+  const [optionImages, setOptionImages] = useState<Record<string, string>>({});
 
   // Validation errors
   const [errors, setErrors] = useState<{
@@ -65,6 +74,7 @@ export default function PhotoSubmissionForm() {
     parameter?: string;
     qualityLevel?: string;
     image?: string;
+    optionImages?: string;
   }>({});
 
   // Fetch games on mount
@@ -153,13 +163,44 @@ export default function PhotoSubmissionForm() {
     const updated = [...customParameterOptions];
     updated[index] = value;
     setCustomParameterOptions(updated);
+    // Also update optionImages - remove the old key and add new one
+    setOptionImages(prev => {
+      const newImages = { ...prev };
+      const oldValue = prev[customParameterOptions[index]];
+      delete newImages[customParameterOptions[index]];
+      if (oldValue && value.trim()) {
+        newImages[value] = oldValue;
+      }
+      return newImages;
+    });
   };
 
   const removeCustomOption = (index: number) => {
     if (customParameterOptions.length > 1) {
+      const optionToRemove = customParameterOptions[index];
       const updated = customParameterOptions.filter((_, i) => i !== index);
       setCustomParameterOptions(updated);
+      // Also remove from optionImages
+      setOptionImages(prev => {
+        const newImages = { ...prev };
+        delete newImages[optionToRemove];
+        return newImages;
+      });
     }
+  };
+
+  // Handle image upload for a specific option
+  const handleOptionImageUpload = (option: string, url: string) => {
+    setOptionImages(prev => ({
+      ...prev,
+      [option]: url,
+    }));
+  };
+
+  // Check if all options have images
+  const allOptionsHaveImages = () => {
+    const validOptions = customParameterOptions.filter(opt => opt.trim() !== '');
+    return validOptions.every(opt => optionImages[opt] && optionImages[opt].trim() !== '');
   };
 
   const validateStep = (step: number): boolean => {
@@ -178,9 +219,6 @@ export default function PhotoSubmissionForm() {
         if (validOptions.length === 0) {
           newErrors.qualityLevel = 'Please add at least one option';
         }
-        if (!selectedCustomOption && validOptions.length > 0) {
-          newErrors.qualityLevel = 'Please select an option for this photo';
-        }
       } else {
         if (!selectedParameterId) {
           newErrors.parameter = 'Please select a parameter';
@@ -190,8 +228,17 @@ export default function PhotoSubmissionForm() {
         }
       }
     } else if (step === 3) {
-      if (!imageUrl) {
-        newErrors.image = 'Please upload an image';
+      if (useCustomParameter) {
+        // For custom parameters, check that all options have images
+        const validOptions = customParameterOptions.filter(opt => opt.trim() !== '');
+        const missingImages = validOptions.filter(opt => !optionImages[opt] || optionImages[opt].trim() === '');
+        if (missingImages.length > 0) {
+          newErrors.optionImages = `Please upload images for all options. Missing: ${missingImages.join(', ')}`;
+        }
+      } else {
+        if (!imageUrl) {
+          newErrors.image = 'Please upload an image';
+        }
       }
     }
 
@@ -219,37 +266,64 @@ export default function PhotoSubmissionForm() {
     setSubmitting(true);
 
     try {
-      const requestBody: Record<string, unknown> = {
-        gameId: selectedGameId,
-        imageUrl,
-      };
-
       if (useCustomParameter) {
-        requestBody.customParameter = {
-          name: customParameterName.trim(),
-          options: customParameterOptions.filter(opt => opt.trim() !== ''),
-          selectedOption: selectedCustomOption,
-        };
+        // Submit multiple photos - one for each option
+        const validOptions = customParameterOptions.filter(opt => opt.trim() !== '');
+        const submissions = validOptions.map(opt => ({
+          gameId: selectedGameId,
+          imageUrl: optionImages[opt],
+          customParameter: {
+            name: customParameterName.trim(),
+            options: validOptions,
+            selectedOption: opt,
+          },
+        }));
+
+        // Submit all photos
+        const results = await Promise.all(
+          submissions.map(sub => 
+            fetch('/api/submissions/photos', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(sub),
+            })
+          )
+        );
+
+        // Check for errors
+        const errors = await Promise.all(results.map(r => r.ok ? null : r.json()));
+        const failedSubmissions = errors.filter(e => e !== null);
+        
+        if (failedSubmissions.length > 0) {
+          throw new Error(`${failedSubmissions.length} submission(s) failed: ${failedSubmissions.map(e => e?.error).join(', ')}`);
+        }
+
+        setSuccess(true);
       } else {
-        requestBody.parameterId = selectedParameterId;
-        requestBody.qualityLevelId = selectedQualityLevelId;
+        // Single photo submission for existing parameter
+        const requestBody: Record<string, unknown> = {
+          gameId: selectedGameId,
+          imageUrl,
+          parameterId: selectedParameterId,
+          qualityLevelId: selectedQualityLevelId,
+        };
+
+        const response = await fetch('/api/submissions/photos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to submit photo');
+        }
+
+        setSuccess(true);
       }
-
-      const response = await fetch('/api/submissions/photos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit photo');
-      }
-
-      setSuccess(true);
     } catch (error) {
       console.error('Submission error:', error);
       setSubmitError(error instanceof Error ? error.message : 'Failed to submit photo');
@@ -271,6 +345,9 @@ export default function PhotoSubmissionForm() {
   const parameterOptions = parameters.map((p) => ({ value: p.id, label: p.name }));
   const qualityLevelOptions = qualityLevels.map((q) => ({ value: q.id, label: q.label || `Level ${q.level}` }));
 
+  // Get valid options for custom parameter
+  const validCustomOptions = customParameterOptions.filter(opt => opt.trim() !== '');
+
   if (success) {
     return (
       <div className="max-w-2xl mx-auto">
@@ -290,9 +367,13 @@ export default function PhotoSubmissionForm() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-3">Photo Submitted!</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">
+            {useCustomParameter ? 'Photos Submitted!' : 'Photo Submitted!'}
+          </h2>
           <p className="text-gray-400 mb-6">
-            Thank you for contributing to our database. Your photo submission for{' '}
+            Thank you for contributing to our database. {useCustomParameter 
+              ? `Your ${validCustomOptions.length} photo submissions for `
+              : 'Your photo submission for '}
             <span className="text-white font-medium">{selectedGame?.name}</span> has been received.
           </p>
           <div className="bg-accent-primary/10 border border-accent-primary/30 rounded-lg p-4 mb-6 text-left">
@@ -303,7 +384,20 @@ export default function PhotoSubmissionForm() {
               <br />
               <span className="text-gray-300">Parameter:</span> {useCustomParameter ? customParameterName : selectedParameter?.name}
               <br />
-              <span className="text-gray-300">Quality Level:</span> {useCustomParameter ? selectedCustomOption : (selectedQualityLevel?.label || `Level ${selectedQualityLevel?.level}`)}
+              {useCustomParameter ? (
+                <>
+                  <span className="text-gray-300">Options submitted:</span>
+                  <ul className="list-disc list-inside ml-2 mt-1">
+                    {validCustomOptions.map(opt => (
+                      <li key={opt}>{opt}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-300">Quality Level:</span> {selectedQualityLevel?.label || `Level ${selectedQualityLevel?.level}`}
+                </>
+              )}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -321,6 +415,7 @@ export default function PhotoSubmissionForm() {
               setCustomParameterName('');
               setCustomParameterOptions(['']);
               setSelectedCustomOption('');
+              setOptionImages({});
             }}>
               Submit Another Photo
             </Button>
@@ -562,7 +657,8 @@ export default function PhotoSubmissionForm() {
                     Parameter Options <span className="text-accent-danger">*</span>
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
-                    Add the different settings/values for this parameter (e.g., Low, Medium, High)
+                    Add the different settings/values for this parameter (e.g., Low, Medium, High). 
+                    You will need to upload a photo for each option in the next step.
                   </p>
                   
                   {customParameterOptions.map((option, index) => (
@@ -604,45 +700,19 @@ export default function PhotoSubmissionForm() {
                   )}
                 </div>
 
-                {/* Select which option this photo represents */}
-                {customParameterOptions.filter(opt => opt.trim() !== '').length > 0 && (
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-200">
-                      This photo represents which option? <span className="text-accent-danger">*</span>
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {customParameterOptions.filter(opt => opt.trim() !== '').map((option, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          onClick={() => {
-                            setSelectedCustomOption(option);
-                            if (errors.qualityLevel) setErrors((prev) => ({ ...prev, qualityLevel: undefined }));
-                          }}
-                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            selectedCustomOption === option
-                              ? 'bg-accent-primary text-white'
-                              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                          }`}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Summary */}
-                {customParameterName && selectedCustomOption && (
+                {customParameterName && validCustomOptions.length > 0 && (
                   <div className="mt-4 p-4 bg-gray-700/30 rounded-lg">
                     <p className="text-sm text-gray-400">
-                      You're submitting a photo for:
+                      You're creating a parameter with {validCustomOptions.length} options:
                       <br />
                       <span className="text-white font-medium">{selectedGame?.name}</span>
                       {' '}→{' '}
                       <span className="text-white font-medium">{customParameterName}</span>
-                      {' '}→{' '}
-                      <span className="text-white font-medium">{selectedCustomOption}</span>
+                      <br />
+                      <span className="text-gray-500">Options: {validCustomOptions.join(', ')}</span>
+                      <br />
+                      <span className="text-accent-primary">You'll upload {validCustomOptions.length} photos in the next step.</span>
                     </p>
                   </div>
                 )}
@@ -651,39 +721,100 @@ export default function PhotoSubmissionForm() {
           </div>
         )}
 
-        {/* Step 3: Upload Photo and Description */}
+        {/* Step 3: Upload Photo(s) */}
         {currentStep === 3 && (
           <div className="bg-gray-800/30 border border-gray-700 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Upload Your Photo</h2>
+            <h2 className="text-lg font-semibold text-white mb-4">
+              {useCustomParameter ? `Upload ${validCustomOptions.length} Photos` : 'Upload Your Photo'}
+            </h2>
             
             <div className="space-y-6">
-              {/* Image Upload */}
-              <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-gray-200">
-                  Photo Upload <span className="text-accent-danger">*</span>
-                </label>
-                <p className="text-xs text-gray-500 mb-2">
-                  Upload a high-quality comparison screenshot
-                </p>
-                <ImageUploader
-                  onUpload={handleImageUpload}
-                  currentImage={imageUrl}
-                  folder="comparisons"
-                />
-                {errors.image && (
-                  <p className="text-sm text-accent-danger mt-1">{errors.image}</p>
-                )}
-              </div>
+              {/* Custom Parameter - Multiple Image Uploads */}
+              {useCustomParameter ? (
+                <div className="space-y-6">
+                  <p className="text-sm text-gray-400">
+                    Upload a photo for each option of your custom parameter. Each photo will be submitted separately for review.
+                  </p>
+                  
+                  {validCustomOptions.map((option, index) => (
+                    <div key={option} className="space-y-2 p-4 bg-gray-700/20 rounded-lg border border-gray-600">
+                      <label className="block text-sm font-medium text-white">
+                        Photo for "{option}" <span className="text-accent-danger">*</span>
+                      </label>
+                      <p className="text-xs text-gray-500">
+                        Upload a screenshot showing the "{option}" setting
+                      </p>
+                      <ImageUploader
+                        onUpload={(url) => handleOptionImageUpload(option, url)}
+                        currentImage={optionImages[option] || ''}
+                        folder="comparisons"
+                      />
+                      {errors.image && !optionImages[option] && (
+                        <p className="text-sm text-accent-danger mt-1">
+                          Please upload a photo for "{option}"
+                        </p>
+                      )}
+                    </div>
+                  ))}
 
-              {/* Submission Summary */}
-              <div className="p-4 bg-gray-700/30 rounded-lg border border-gray-600">
-                <h3 className="text-sm font-medium text-white mb-2">Submission Summary</h3>
-                <div className="space-y-1 text-sm text-gray-400">
-                  <p><span className="text-gray-500">Game:</span> {selectedGame?.name}</p>
-                  <p><span className="text-gray-500">Parameter:</span> {useCustomParameter ? customParameterName : selectedParameter?.name}</p>
-                  <p><span className="text-gray-500">Quality Level:</span> {useCustomParameter ? selectedCustomOption : (selectedQualityLevel?.label || `Level ${selectedQualityLevel?.level}`)}</p>
+                  {/* Progress indicator */}
+                  <div className="p-3 bg-gray-700/30 rounded-lg">
+                    <p className="text-sm text-gray-400">
+                      Progress: {Object.keys(optionImages).filter(key => validCustomOptions.includes(key) && optionImages[key]).length} of {validCustomOptions.length} photos uploaded
+                    </p>
+                    <div className="mt-2 h-2 bg-gray-600 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-accent-primary transition-all duration-300"
+                        style={{ 
+                          width: `${(Object.keys(optionImages).filter(key => validCustomOptions.includes(key) && optionImages[key]).length / validCustomOptions.length) * 100}%` 
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Submission Summary */}
+                  <div className="p-4 bg-gray-700/30 rounded-lg border border-gray-600">
+                    <h3 className="text-sm font-medium text-white mb-2">Submission Summary</h3>
+                    <div className="space-y-1 text-sm text-gray-400">
+                      <p><span className="text-gray-500">Game:</span> {selectedGame?.name}</p>
+                      <p><span className="text-gray-500">Custom Parameter:</span> {customParameterName}</p>
+                      <p><span className="text-gray-500">Options:</span> {validCustomOptions.join(', ')}</p>
+                      <p><span className="text-gray-500">Total Submissions:</span> {validCustomOptions.length} photos</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                /* Existing Parameter - Single Image Upload */
+                <div className="space-y-6">
+                  {/* Image Upload */}
+                  <div className="space-y-1.5">
+                    <label className="block text-sm font-medium text-gray-200">
+                      Photo Upload <span className="text-accent-danger">*</span>
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Upload a high-quality comparison screenshot
+                    </p>
+                    <ImageUploader
+                      onUpload={handleImageUpload}
+                      currentImage={imageUrl}
+                      folder="comparisons"
+                    />
+                    {errors.image && (
+                      <p className="text-sm text-accent-danger mt-1">{errors.image}</p>
+                    )}
+                  </div>
+
+                  {/* Submission Summary */}
+                  <div className="p-4 bg-gray-700/30 rounded-lg border border-gray-600">
+                    <h3 className="text-sm font-medium text-white mb-2">Submission Summary</h3>
+                    <div className="space-y-1 text-sm text-gray-400">
+                      <p><span className="text-gray-500">Game:</span> {selectedGame?.name}</p>
+                      <p><span className="text-gray-500">Parameter:</span> {selectedParameter?.name}</p>
+                      <p><span className="text-gray-500">Quality Level:</span> {selectedQualityLevel?.label || `Level ${selectedQualityLevel?.level}`}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -740,7 +871,7 @@ export default function PhotoSubmissionForm() {
                 (currentStep === 1 && !selectedGameId) ||
                 (currentStep === 2 && (
                   useCustomParameter
-                    ? !customParameterName || !selectedCustomOption
+                    ? !customParameterName || validCustomOptions.length === 0
                     : !selectedParameterId || !selectedQualityLevelId
                 ))
               }
@@ -751,9 +882,11 @@ export default function PhotoSubmissionForm() {
             <Button
               type="submit"
               loading={submitting}
-              disabled={submitting || !imageUrl}
+              disabled={submitting || (useCustomParameter ? !allOptionsHaveImages() : !imageUrl)}
             >
-              Submit Photo
+              {useCustomParameter 
+                ? `Submit ${validCustomOptions.length} Photos` 
+                : 'Submit Photo'}
             </Button>
           )}
         </div>
@@ -761,8 +894,8 @@ export default function PhotoSubmissionForm() {
         {/* Notice */}
         <div className="bg-gray-800/30 border border-gray-700/50 rounded-lg p-4 text-sm text-gray-400">
           <p>
-            <span className="text-accent-primary font-medium">Note:</span> Your submission will be 
-            reviewed by our team before being published. Please ensure your screenshot accurately 
+            <span className="text-accent-primary font-medium">Note:</span> Your submission{useCustomParameter ? 's will be' : ' will be'} 
+            reviewed by our team before being published. Please ensure your screenshot{useCustomParameter ? 's accurately' : ' accurately'} 
             represents the selected settings.
           </p>
         </div>

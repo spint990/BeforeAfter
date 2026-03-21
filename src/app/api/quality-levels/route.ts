@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createQualityLevelSchema } from "@/lib/validations";
 import { z } from "zod";
+import { logError } from "@/lib/error-utils";
 
 // GET /api/quality-levels - List all quality levels (optional parameterId filter)
 export async function GET(request: NextRequest) {
@@ -38,7 +39,7 @@ export async function GET(request: NextRequest) {
       data: qualityLevels,
     });
   } catch (error) {
-    console.error("Error fetching quality levels:", error);
+    logError("Error fetching quality levels:", error);
     return NextResponse.json({ error: "Failed to fetch quality levels" }, { status: 500 });
   }
 }
@@ -92,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(qualityLevel, { status: 201 });
   } catch (error) {
-    console.error("Error creating quality level:", error);
+    logError("Error creating quality level:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },

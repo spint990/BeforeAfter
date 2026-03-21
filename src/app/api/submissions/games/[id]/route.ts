@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logError } from "@/lib/error-utils";
 import { z } from "zod";
 
 // Update game submission validation schema
@@ -56,7 +57,7 @@ export async function GET(
 
     return NextResponse.json(submission);
   } catch (error) {
-    console.error("Error fetching game submission:", error);
+    logError("Error fetching game submission:", error);
     return NextResponse.json({ error: "Failed to fetch game submission" }, { status: 500 });
   }
 }
@@ -136,7 +137,7 @@ export async function PATCH(
 
     return NextResponse.json(submission);
   } catch (error) {
-    console.error("Error updating game submission:", error);
+    logError("Error updating game submission:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },
@@ -177,7 +178,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Game submission deleted successfully" });
   } catch (error) {
-    console.error("Error deleting game submission:", error);
+    logError("Error deleting game submission:", error);
     return NextResponse.json({ error: "Failed to delete game submission" }, { status: 500 });
   }
 }

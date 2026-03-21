@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createParameterSchema } from "@/lib/validations";
+import { logError } from "@/lib/error-utils";
 import { z } from "zod";
 
 // GET /api/parameters - List all parameters (optional gameId filter)
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
       data: parameters,
     });
   } catch (error) {
-    console.error("Error fetching parameters:", error);
+    logError("Error fetching parameters:", error);
     return NextResponse.json({ error: "Failed to fetch parameters" }, { status: 500 });
   }
 }
@@ -93,7 +94,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(parameter, { status: 201 });
   } catch (error) {
-    console.error("Error creating parameter:", error);
+    logError("Error creating parameter:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },

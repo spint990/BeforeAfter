@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { updateQualityLevelSchema } from "@/lib/validations";
 import { z } from "zod";
+import { logError } from "@/lib/error-utils";
 
 // GET /api/quality-levels/[id] - Get a single quality level
 export async function GET(
@@ -37,7 +38,7 @@ export async function GET(
 
     return NextResponse.json(qualityLevel);
   } catch (error) {
-    console.error("Error fetching quality level:", error);
+    logError("Error fetching quality level:", error);
     return NextResponse.json({ error: "Failed to fetch quality level" }, { status: 500 });
   }
 }
@@ -115,7 +116,7 @@ export async function PUT(
 
     return NextResponse.json(qualityLevel);
   } catch (error) {
-    console.error("Error updating quality level:", error);
+    logError("Error updating quality level:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },
@@ -150,7 +151,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting quality level:", error);
+    logError("Error deleting quality level:", error);
     return NextResponse.json({ error: "Failed to delete quality level" }, { status: 500 });
   }
 }

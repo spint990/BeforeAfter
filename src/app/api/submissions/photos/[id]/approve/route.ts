@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logError } from "@/lib/error-utils";
 
 // POST /api/submissions/photos/[id]/approve - Approve a photo submission
 export async function POST(
@@ -75,7 +76,7 @@ export async function POST(
       submission: result.submission,
     });
   } catch (error) {
-    console.error("Error approving photo submission:", error);
+    logError("Error approving photo submission:", error);
     return NextResponse.json({ error: "Failed to approve photo submission" }, { status: 500 });
   }
 }

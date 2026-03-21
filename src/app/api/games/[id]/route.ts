@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { updateGameSchema } from "@/lib/validations";
+import { logError } from "@/lib/error-utils";
 import { z } from "zod";
 
 // Helper function to check if string is a valid CUID
@@ -43,7 +44,7 @@ export async function GET(
 
     return NextResponse.json(game);
   } catch (error) {
-    console.error("Error fetching game:", error);
+    logError("Error fetching game:", error);
     return NextResponse.json({ error: "Failed to fetch game" }, { status: 500 });
   }
 }
@@ -93,7 +94,7 @@ export async function PUT(
 
     return NextResponse.json(game);
   } catch (error) {
-    console.error("Error updating game:", error);
+    logError("Error updating game:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },
@@ -128,7 +129,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting game:", error);
+    logError("Error deleting game:", error);
     return NextResponse.json({ error: "Failed to delete game" }, { status: 500 });
   }
 }

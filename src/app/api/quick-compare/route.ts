@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logError } from "@/lib/error-utils";
 
 // POST /api/quick-compare - Create a new quick comparison
 export async function POST(request: NextRequest) {
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error creating quick comparison:", error);
+    logError("Error creating quick comparison:", error);
     return NextResponse.json(
       { success: false, error: "Failed to create quick comparison" },
       { status: 500 }

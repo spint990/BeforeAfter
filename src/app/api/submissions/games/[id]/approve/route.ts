@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logError } from "@/lib/error-utils";
 
 // POST /api/submissions/games/[id]/approve - Approve a game submission
 export async function POST(
@@ -68,7 +69,7 @@ export async function POST(
       submission: result.submission,
     });
   } catch (error) {
-    console.error("Error approving game submission:", error);
+    logError("Error approving game submission:", error);
     return NextResponse.json({ error: "Failed to approve game submission" }, { status: 500 });
   }
 }

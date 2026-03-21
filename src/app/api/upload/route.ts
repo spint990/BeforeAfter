@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { randomUUID } from "crypto";
+import { logError } from "@/lib/error-utils";
 
 // Allowed file types
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -11,7 +12,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check if BLOB_READ_WRITE_TOKEN is configured
     if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      console.error("BLOB_READ_WRITE_TOKEN is not configured");
+      logError("BLOB_READ_WRITE_TOKEN is not configured", new Error("Missing BLOB_READ_WRITE_TOKEN environment variable"));
       return NextResponse.json(
         { success: false, error: "Blob storage is not configured" },
         { status: 500 }
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
       filename: uniqueFilename,
     });
   } catch (error) {
-    console.error("Error uploading file:", error);
+    logError("Error uploading file:", error);
     return NextResponse.json(
       { success: false, error: "Failed to upload file" },
       { status: 500 }

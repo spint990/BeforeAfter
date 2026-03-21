@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { paginationSchema } from "@/lib/validations";
+import { logError } from "@/lib/error-utils";
 import { z } from "zod";
 
 // Status enum for validation
@@ -82,7 +83,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error fetching game submissions:", error);
+    logError("Error fetching game submissions:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Invalid query parameters", details: error.errors },
@@ -142,7 +143,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(submission, { status: 201 });
   } catch (error) {
-    console.error("Error creating game submission:", error);
+    logError("Error creating game submission:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },

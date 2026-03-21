@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createGameSchema, paginationSchema } from "@/lib/validations";
+import { logError } from "@/lib/error-utils";
 import { z } from "zod";
 
 // GET /api/games - List all games with pagination
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
       total,
     });
   } catch (error) {
-    console.error("Error fetching games:", error);
+    logError("Error fetching games:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Invalid query parameters", details: error.errors },
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(game, { status: 201 });
   } catch (error) {
-    console.error("Error creating game:", error);
+    logError("Error creating game:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },

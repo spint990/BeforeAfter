@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { logError } from "@/lib/error-utils";
 
 // Rejection validation schema
 const rejectGameSubmissionSchema = z.object({
@@ -48,7 +49,7 @@ export async function POST(
       submission: updatedSubmission,
     });
   } catch (error) {
-    console.error("Error rejecting game submission:", error);
+    logError("Error rejecting game submission:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },

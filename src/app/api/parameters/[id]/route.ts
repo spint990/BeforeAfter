@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { updateParameterSchema } from "@/lib/validations";
 import { z } from "zod";
+import { logError } from "@/lib/error-utils";
 
 // GET /api/parameters/[id] - Get a single parameter with all quality levels
 export async function GET(
@@ -35,7 +36,7 @@ export async function GET(
 
     return NextResponse.json(parameter);
   } catch (error) {
-    console.error("Error fetching parameter:", error);
+    logError("Error fetching parameter:", error);
     return NextResponse.json({ error: "Failed to fetch parameter" }, { status: 500 });
   }
 }
@@ -113,7 +114,7 @@ export async function PUT(
 
     return NextResponse.json(parameter);
   } catch (error) {
-    console.error("Error updating parameter:", error);
+    logError("Error updating parameter:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },
@@ -148,7 +149,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting parameter:", error);
+    logError("Error deleting parameter:", error);
     return NextResponse.json({ error: "Failed to delete parameter" }, { status: 500 });
   }
 }

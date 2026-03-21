@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logError } from "@/lib/error-utils";
 
 // GET /api/quick-compare/[id] - Get a quick comparison by ID
 export async function GET(
@@ -41,7 +42,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error fetching quick comparison:", error);
+    logError("Error fetching quick comparison:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch quick comparison" },
       { status: 500 }
@@ -77,7 +78,7 @@ export async function DELETE(
       message: "Comparison deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting quick comparison:", error);
+    logError("Error deleting quick comparison:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete quick comparison" },
       { status: 500 }

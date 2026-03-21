@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logError } from "@/lib/error-utils";
 import { z } from "zod";
 
 // Update photo submission validation schema
@@ -74,7 +75,7 @@ export async function GET(
 
     return NextResponse.json(transformedSubmission);
   } catch (error) {
-    console.error("Error fetching photo submission:", error);
+    logError("Error fetching photo submission:", error);
     return NextResponse.json({ error: "Failed to fetch photo submission" }, { status: 500 });
   }
 }
@@ -192,7 +193,7 @@ export async function PATCH(
 
     return NextResponse.json(submission);
   } catch (error) {
-    console.error("Error updating photo submission:", error);
+    logError("Error updating photo submission:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Validation failed", details: error.errors },
@@ -233,7 +234,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Photo submission deleted successfully" });
   } catch (error) {
-    console.error("Error deleting photo submission:", error);
+    logError("Error deleting photo submission:", error);
     return NextResponse.json({ error: "Failed to delete photo submission" }, { status: 500 });
   }
 }

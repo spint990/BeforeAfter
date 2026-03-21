@@ -62,9 +62,22 @@ export const updateQualityLevelSchema = z.object({
 });
 
 // Pagination query schema
+// DEBUG: Log incoming values to diagnose ZodError
 export const paginationSchema = z.object({
-  skip: z.coerce.number().int().min(0).default(0),
-  take: z.coerce.number().int().min(1).max(100).default(20),
+  skip: z.preprocess(
+    (val) => {
+      console.log('[DEBUG paginationSchema] skip input:', val, typeof val);
+      return val === null ? undefined : val;
+    },
+    z.coerce.number().int().min(0).default(0)
+  ),
+  take: z.preprocess(
+    (val) => {
+      console.log('[DEBUG paginationSchema] take input:', val, typeof val);
+      return val === null ? undefined : val;
+    },
+    z.coerce.number().int().min(1).max(100).default(20)
+  ),
 });
 
 // Type exports for use in API routes

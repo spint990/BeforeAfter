@@ -10,6 +10,16 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'localhost',
       },
+      // Vercel Blob storage
+      {
+        protocol: 'https',
+        hostname: '*.blob.vercel-storage.com',
+      },
+      // Public folder uploads (local development)
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
   },
 };

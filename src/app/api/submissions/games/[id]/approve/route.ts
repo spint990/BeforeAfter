@@ -62,6 +62,7 @@ export async function POST(
     // Revalidate the games pages to show the new game
     revalidatePath("/games");
     revalidatePath("/", "layout");
+    revalidatePath("/admin/games");
     revalidateTag("games");
 
     return NextResponse.json({

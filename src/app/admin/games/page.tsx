@@ -32,9 +32,12 @@ export default function AdminGamesPage() {
       const response = await fetch('/api/games');
       const data = await response.json();
       
+      // API returns { games, total }, so we need to access data.games
+      const gamesList = data.games || data;
+      
       // Fetch parameter counts for each game
       const gamesWithCounts = await Promise.all(
-        data.map(async (game: Game) => {
+        gamesList.map(async (game: Game) => {
           const paramsResponse = await fetch(`/api/parameters?gameId=${game.id}`);
           const params = await paramsResponse.json();
           return {

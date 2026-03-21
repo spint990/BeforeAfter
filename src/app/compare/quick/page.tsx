@@ -25,7 +25,7 @@ const UploadBox = React.memo(function UploadBox({
   setImageState,
 }: {
   state: ImageUploadState;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef: React.RefObject<HTMLInputElement>;
   onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   onLabelChange: (value: string) => void;

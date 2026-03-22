@@ -38,6 +38,11 @@ export default function ParameterManager({
   const [loading, setLoading] = useState(false);
   const [expandedParameter, setExpandedParameter] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
+  // State for adding new quality level (option)
+  const [addingOptionForParameter, setAddingOptionForParameter] = useState<string | null>(null);
+  const [newOptionLevel, setNewOptionLevel] = useState('');
+  const [addingOptionLoading, setAddingOptionLoading] = useState(false);
 
   // Auto-generate slug from name
   const generateSlug = (name: string) => {
@@ -196,6 +201,72 @@ export default function ParameterManager({
     setErrors((prev) => ({ ...prev, editName: '' }));
   };
 
+  // Add new quality level (option) to a parameter
+  const handleAddOption = async (parameterId: string) => {
+    if (!newOptionLevel.trim()) {
+      setErrors((prev) => ({ ...prev, [`option-${parameterId}`]: 'Level name is required' }));
+      return;
+    }
+
+    // Check if level already exists
+    const parameter = parameters.find((p) => p.id === parameterId);
+    const qualityLevels = parameter?.qualityLevels ?? [];
+    if (qualityLevels.some((ql) => ql?.level.toLowerCase() === newOptionLevel.trim().toLowerCase())) {
+      setErrors((prev) => ({ ...prev, [`option-${parameterId}`]: 'This level already exists' }));
+      return;
+    }
+
+    setAddingOptionLoading(true);
+    try {
+      const response = await fetch('/api/quality-levels', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          parameterId,
+          level: newOptionLevel.trim(),
+          imageUrl: null,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to create quality level');
+
+      setNewOptionLevel('');
+      setAddingOptionForParameter(null);
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[`option-${parameterId}`];
+        return newErrors;
+      });
+      onRefresh();
+    } catch (error) {
+      console.error('Error adding quality level:', error);
+    } finally {
+      setAddingOptionLoading(false);
+    }
+  };
+
+  // Delete quality level (option)
+  const handleDeleteOption = async (qualityLevelId: string) => {
+    if (!confirm('Are you sure you want to delete this quality level?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/quality-levels/${qualityLevelId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete quality level');
+
+      onRefresh();
+    } catch (error) {
+      console.error('Error deleting quality level:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -337,17 +408,82 @@ export default function ParameterManager({
               {/* Quality Levels Section */}
               {expandedParameter === parameter.id && (
                 <div className="border-t border-gray-700 p-4">
-                  <h5 className="text-sm font-medium text-gray-300 mb-4">Quality Levels</h5>
+                  <div className="flex items-center justify-between mb-4">
+                    <h5 className="text-sm font-medium text-gray-300">Quality Levels (Options)</h5>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setAddingOptionForParameter(
+                          addingOptionForParameter === parameter.id ? null : parameter.id
+                        );
+                        setNewOptionLevel('');
+                        setErrors((prev) => {
+                          const newErrors = { ...prev };
+                          delete newErrors[`option-${parameter.id}`];
+                          return newErrors;
+                        });
+                      }}
+                    >
+                      {addingOptionForParameter === parameter.id ? 'Cancel' : '+ Add Option'}
+                    </Button>
+                  </div>
+
+                  {/* Add New Option Form */}
+                  {addingOptionForParameter === parameter.id && (
+                    <div className="mb-4 p-3 bg-gray-900/50 rounded-lg border border-gray-600/50 flex flex-wrap items-end gap-3">
+                      <div className="flex-1 min-w-[200px]">
+                        <Input
+                          label="Option Name"
+                          value={newOptionLevel}
+                          onChange={(e) => {
+                            setNewOptionLevel(e.target.value);
+                            if (errors[`option-${parameter.id}`]) {
+                              setErrors((prev) => {
+                                const newErrors = { ...prev };
+                                delete newErrors[`option-${parameter.id}`];
+                                return newErrors;
+                              });
+                            }
+                          }}
+                          error={errors[`option-${parameter.id}`]}
+                          placeholder="e.g., Low, Medium, High, Ultra"
+                          disabled={addingOptionLoading}
+                        />
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => handleAddOption(parameter.id)}
+                        loading={addingOptionLoading}
+                      >
+                        Add Option
+                      </Button>
+                    </div>
+                  )}
+
                   {(() => {
                     const qualityLevels = parameter?.qualityLevels ?? [];
                     if (qualityLevels.length === 0) {
-                      return <p className="text-gray-500 text-sm">No quality levels configured for this parameter.</p>;
+                      return (
+                        <p className="text-gray-500 text-sm">
+                          No quality levels configured. Click &quot;+ Add Option&quot; to add one.
+                        </p>
+                      );
                     }
                     return (
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {qualityLevels.map((qualityLevel) => (
-                          <div key={qualityLevel.id} className="space-y-2">
-                            <p className="text-xs font-medium text-gray-400">{qualityLevel.level}</p>
+                          <div key={qualityLevel.id} className="space-y-2 group relative">
+                            <div className="flex items-center justify-between">
+                              <p className="text-xs font-medium text-gray-400">{qualityLevel.level}</p>
+                              <button
+                                onClick={() => handleDeleteOption(qualityLevel.id)}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-300 text-xs"
+                                title="Delete option"
+                              >
+                                ✕
+                              </button>
+                            </div>
                             <ImageUploader
                               onUpload={(url) => handleQualityLevelImageUpload(parameter.id, qualityLevel.level, url)}
                               currentImage={qualityLevel?.imageUrl ?? undefined}

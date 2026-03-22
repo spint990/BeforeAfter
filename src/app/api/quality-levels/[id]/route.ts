@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { updateQualityLevelSchema } from "@/lib/validations";
 import { z } from "zod";
 import { logError } from "@/lib/error-utils";
+import { Prisma } from "@prisma/client";
 
 // GET /api/quality-levels/[id] - Get a single quality level
 export async function GET(
@@ -96,13 +97,21 @@ export async function PUT(
       }
     }
 
+    // Build update data object with proper typing
+    const updateData: Prisma.QualityLevelUncheckedUpdateInput = {};
+    if (validatedData.level !== undefined) {
+      updateData.level = validatedData.level;
+    }
+    if (validatedData.imageUrl !== undefined) {
+      updateData.imageUrl = validatedData.imageUrl;
+    }
+    if (validatedData.parameterId !== undefined) {
+      updateData.parameterId = validatedData.parameterId;
+    }
+
     const qualityLevel = await prisma.qualityLevel.update({
       where: { id },
-      data: {
-        ...(validatedData.level !== undefined && { level: validatedData.level }),
-        ...(validatedData.imageUrl !== undefined && { imageUrl: validatedData.imageUrl }),
-        ...(validatedData.parameterId !== undefined && { parameterId: validatedData.parameterId }),
-      },
+      data: updateData,
       include: {
         parameter: {
           select: {

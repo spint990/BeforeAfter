@@ -48,13 +48,13 @@ export const updateParameterSchema = z.object({
 // Level can be any string (custom levels allowed), not just predefined enum values
 export const createQualityLevelSchema = z.object({
   level: z.string().min(1, "Level name is required").max(100, "Level name is too long"),
-  imageUrl: z.string().url("Image URL must be a valid URL").nullable().optional(),
+  imageUrl: z.string().optional(), // Optional - can be empty string or URL
   parameterId: z.string().min(1, "Parameter ID is required"),
 });
 
 export const updateQualityLevelSchema = z.object({
   level: z.string().min(1, "Level name is required").max(100, "Level name is too long").optional(),
-  imageUrl: z.string().url("Image URL must be a valid URL").nullable().optional(),
+  imageUrl: z.string().optional(), // Optional - can be empty string or URL
   parameterId: z.string().min(1, "Parameter ID is required").optional(),
 });
 

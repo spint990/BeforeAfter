@@ -224,7 +224,7 @@ export default function ParameterManager({
         body: JSON.stringify({
           parameterId,
           level: newOptionLevel.trim(),
-          imageUrl: null,
+          imageUrl: '', // Empty string as placeholder, will be updated when image is uploaded
         }),
       });
 

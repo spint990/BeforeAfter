@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     const qualityLevel = await prisma.qualityLevel.create({
       data: {
         level: validatedData.level,
-        imageUrl: validatedData.imageUrl,
+        imageUrl: validatedData.imageUrl || '', // Default to empty string if not provided
         parameterId: validatedData.parameterId,
       },
       include: {

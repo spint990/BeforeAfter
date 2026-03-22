@@ -8,14 +8,14 @@ import ImageUploader from './ImageUploader';
 interface QualityLevel {
   id: string;
   level: string;
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 interface Parameter {
   id: string;
   name: string;
   slug: string;
-  qualityLevels: QualityLevel[];
+  qualityLevels: QualityLevel[] | null;
 }
 
 interface ParameterManagerProps {
@@ -152,10 +152,10 @@ export default function ParameterManager({
   // Handle quality level image upload
   const handleQualityLevelImageUpload = async (parameterId: string, level: string, imageUrl: string) => {
     try {
-      // Check if quality level exists
-      const existingLevel = parameters
-        .find((p) => p.id === parameterId)
-        ?.qualityLevels.find((ql) => ql.level === level);
+      // Check if quality level exists (with null safety)
+      const parameter = parameters.find((p) => p.id === parameterId);
+      const qualityLevels = parameter?.qualityLevels ?? [];
+      const existingLevel = qualityLevels.find((ql) => ql?.level === level);
 
       if (existingLevel) {
         // Update existing
@@ -342,13 +342,14 @@ export default function ParameterManager({
                   <h5 className="text-sm font-medium text-gray-300 mb-4">Quality Levels</h5>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {DEFAULT_LEVELS.map((level) => {
-                      const qualityLevel = parameter.qualityLevels.find((ql) => ql.level === level);
+                      const qualityLevels = parameter?.qualityLevels ?? [];
+                      const qualityLevel = qualityLevels.find((ql) => ql?.level === level);
                       return (
                         <div key={level} className="space-y-2">
                           <p className="text-xs font-medium text-gray-400">{level}</p>
                           <ImageUploader
                             onUpload={(url) => handleQualityLevelImageUpload(parameter.id, level, url)}
-                            currentImage={qualityLevel?.imageUrl}
+                            currentImage={qualityLevel?.imageUrl ?? undefined}
                             folder="comparisons"
                           />
                         </div>

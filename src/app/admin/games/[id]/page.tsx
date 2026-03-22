@@ -10,14 +10,14 @@ import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 interface QualityLevel {
   id: string;
   level: string;
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 interface Parameter {
   id: string;
   name: string;
   slug: string;
-  qualityLevels: QualityLevel[];
+  qualityLevels: QualityLevel[] | null;
 }
 
 interface Game {
@@ -63,9 +63,15 @@ export default function EditGamePage() {
       // Fetch quality levels for each parameter
       const paramsWithLevels = await Promise.all(
         parametersArray.map(async (param: Parameter) => {
-          const qlResponse = await fetch(`/api/quality-levels?parameterId=${param.id}`);
-          const qualityLevels = await qlResponse.json();
-          return { ...param, qualityLevels };
+          try {
+            const qlResponse = await fetch(`/api/quality-levels?parameterId=${param.id}`);
+            const qlData = await qlResponse.json();
+            // Handle both { data: [...] } and direct array responses
+            const qualityLevels = Array.isArray(qlData) ? qlData : (qlData.data || []);
+            return { ...param, qualityLevels };
+          } catch {
+            return { ...param, qualityLevels: [] };
+          }
         })
       );
       
@@ -275,7 +281,7 @@ export default function EditGamePage() {
                   >
                     <div>
                       <h3 className="font-medium">{param.name}</h3>
-                      <p className="text-sm text-gray-500">{param.qualityLevels.length} quality levels</p>
+                      <p className="text-sm text-gray-500">{param.qualityLevels?.length ?? 0} quality levels</p>
                     </div>
                     <Link
                       href={`/games/${game.slug}?param=${param.slug}`}

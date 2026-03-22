@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { AdminProvider, useAdmin } from '@/contexts/AdminContext';
 
 interface NavItem {
   label: string;
@@ -55,40 +56,13 @@ function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
   );
 }
 
-export default function AdminLayout({
+function AdminLayoutContent({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [pendingCount, setPendingCount] = useState(0);
-
-  useEffect(() => {
-    fetchPendingCount();
-  }, []);
-
-  const fetchPendingCount = async () => {
-    try {
-      const [gamesRes, photosRes] = await Promise.all([
-        fetch('/api/submissions/games?status=pending'),
-        fetch('/api/submissions/photos?status=pending'),
-      ]);
-      
-      let count = 0;
-      if (gamesRes.ok) {
-        const gamesData = await gamesRes.json();
-        count += gamesData.length || 0;
-      }
-      if (photosRes.ok) {
-        const photosData = await photosRes.json();
-        count += photosData.total || photosData.submissions?.length || 0;
-      }
-      
-      setPendingCount(count);
-    } catch (error) {
-      console.error('Error fetching pending count:', error);
-    }
-  };
+  const { pendingCount } = useAdmin();
 
   const navItems: NavItem[] = baseNavItems.map((item) => {
     if (item.label === 'Submissions') {
@@ -163,5 +137,17 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
+  );
+}
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <AdminProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AdminProvider>
   );
 }

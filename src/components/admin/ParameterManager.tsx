@@ -24,8 +24,6 @@ interface ParameterManagerProps {
   onRefresh: () => void;
 }
 
-const DEFAULT_LEVELS = ['Low', 'Medium', 'High', 'Ultra'];
-
 export default function ParameterManager({
   gameId,
   parameters,
@@ -340,22 +338,26 @@ export default function ParameterManager({
               {expandedParameter === parameter.id && (
                 <div className="border-t border-gray-700 p-4">
                   <h5 className="text-sm font-medium text-gray-300 mb-4">Quality Levels</h5>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {DEFAULT_LEVELS.map((level) => {
-                      const qualityLevels = parameter?.qualityLevels ?? [];
-                      const qualityLevel = qualityLevels.find((ql) => ql?.level === level);
-                      return (
-                        <div key={level} className="space-y-2">
-                          <p className="text-xs font-medium text-gray-400">{level}</p>
-                          <ImageUploader
-                            onUpload={(url) => handleQualityLevelImageUpload(parameter.id, level, url)}
-                            currentImage={qualityLevel?.imageUrl ?? undefined}
-                            folder="comparisons"
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+                  {(() => {
+                    const qualityLevels = parameter?.qualityLevels ?? [];
+                    if (qualityLevels.length === 0) {
+                      return <p className="text-gray-500 text-sm">No quality levels configured for this parameter.</p>;
+                    }
+                    return (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {qualityLevels.map((qualityLevel) => (
+                          <div key={qualityLevel.id} className="space-y-2">
+                            <p className="text-xs font-medium text-gray-400">{qualityLevel.level}</p>
+                            <ImageUploader
+                              onUpload={(url) => handleQualityLevelImageUpload(parameter.id, qualityLevel.level, url)}
+                              currentImage={qualityLevel?.imageUrl ?? undefined}
+                              folder="comparisons"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>

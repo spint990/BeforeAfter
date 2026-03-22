@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import ImageComparisonSlider from '@/components/comparison/ImageComparisonSlider';
 import Button from '@/components/ui/Button';
+import { useAdmin } from '@/contexts/AdminContext';
 
 interface PhotoSubmission {
   id: string;
@@ -42,6 +43,7 @@ interface PhotoSubmission {
 export default function PhotoSubmissionReviewPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
+  const { refreshPendingCount } = useAdmin();
   const [submission, setSubmission] = useState<PhotoSubmission | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -81,6 +83,7 @@ export default function PhotoSubmissionReviewPage() {
         throw new Error(error.error || 'Failed to approve submission');
       }
 
+      await refreshPendingCount();
       router.push('/admin/submissions');
     } catch (error) {
       console.error('Error approving submission:', error);
@@ -112,6 +115,7 @@ export default function PhotoSubmissionReviewPage() {
       }
 
       setRejectModal(false);
+      await refreshPendingCount();
       router.push('/admin/submissions');
     } catch (error) {
       console.error('Error rejecting submission:', error);

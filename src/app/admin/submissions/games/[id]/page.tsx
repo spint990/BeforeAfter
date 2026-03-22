@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import DeleteConfirmModal from '@/components/admin/DeleteConfirmModal';
 import Button from '@/components/ui/Button';
+import { useAdmin } from '@/contexts/AdminContext';
 
 interface GameSubmission {
   id: string;
@@ -26,6 +27,7 @@ interface GameSubmission {
 export default function GameSubmissionReviewPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
+  const { refreshPendingCount } = useAdmin();
   const [submission, setSubmission] = useState<GameSubmission | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -64,6 +66,7 @@ export default function GameSubmissionReviewPage() {
         throw new Error(error.error || 'Failed to approve submission');
       }
 
+      await refreshPendingCount();
       router.push('/admin/submissions/games');
     } catch (error) {
       console.error('Error approving submission:', error);
@@ -95,6 +98,7 @@ export default function GameSubmissionReviewPage() {
       }
 
       setRejectModal(false);
+      await refreshPendingCount();
       router.push('/admin/submissions/games');
     } catch (error) {
       console.error('Error rejecting submission:', error);

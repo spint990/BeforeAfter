@@ -9,9 +9,7 @@ import Button from '@/components/ui/Button';
 interface PhotoSubmission {
   id: string;
   imageUrl: string;
-  description: string | null;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  submittedBy: string | null;
   rejectionReason: string | null;
   createdAt: string;
   updatedAt: string;
@@ -214,7 +212,7 @@ export default function PhotoSubmissionReviewPage() {
         <div>
           <h1 className="text-2xl font-bold">Review Photo Submission</h1>
           <p className="text-gray-400 mt-1">
-            Submitted by {submission.submittedBy || 'Anonymous'} on {new Date(submission.createdAt).toLocaleDateString()}
+            Submitted on {new Date(submission.createdAt).toLocaleDateString()}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -335,13 +333,6 @@ export default function PhotoSubmissionReviewPage() {
                       </span>
                     ))}
                   </div>
-                </div>
-              )}
-
-              {submission.description && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Description</label>
-                  <p className="text-white whitespace-pre-wrap">{submission.description}</p>
                 </div>
               )}
             </div>

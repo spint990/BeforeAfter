@@ -8,10 +8,8 @@ interface GameSubmission {
   id: string;
   name: string;
   slug: string;
-  description: string | null;
   coverImageUrl: string | null;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  submittedBy: string | null;
   createdAt: string;
   game: {
     id: string;
@@ -176,7 +174,6 @@ export default function GameSubmissionsListPage() {
               <tr className="border-b border-gray-700 bg-gray-800/50">
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Game</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Slug</th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Submitted By</th>
                 <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Date</th>
                 <th className="text-center px-4 py-3 text-sm font-medium text-gray-400">Status</th>
                 <th className="text-right px-4 py-3 text-sm font-medium text-gray-400">Actions</th>
@@ -207,9 +204,6 @@ export default function GameSubmissionsListPage() {
                     <code className="text-sm text-gray-400 bg-gray-700 px-2 py-1 rounded">
                       {submission.slug}
                     </code>
-                  </td>
-                  <td className="px-4 py-4 text-gray-400">
-                    {submission.submittedBy || 'Anonymous'}
                   </td>
                   <td className="px-4 py-4 text-gray-400 text-sm">
                     {new Date(submission.createdAt).toLocaleDateString()}

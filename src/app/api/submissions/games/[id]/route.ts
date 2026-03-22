@@ -12,12 +12,8 @@ const updateGameSubmissionSchema = z.object({
     .max(255, "Slug is too long")
     .regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens")
     .optional(),
-  description: z.string().max(2000, "Description is too long").optional().nullable(),
-  developer: z.string().max(255, "Developer name is too long").optional().nullable(),
-  publisher: z.string().max(255, "Publisher name is too long").optional().nullable(),
   releaseYear: z.number().int().min(1970).max(new Date().getFullYear() + 5).optional().nullable(),
   coverImageUrl: z.string().url("Cover image must be a valid URL").optional().nullable().or(z.literal("")),
-  submittedBy: z.string().max(255, "Submitter name is too long").optional().nullable(),
 });
 
 // Helper function to generate slug from name
@@ -123,12 +119,8 @@ export async function PATCH(
     const updateData: Record<string, unknown> = {};
     if (validatedData.name !== undefined) updateData.name = validatedData.name;
     if (slug !== undefined) updateData.slug = slug;
-    if (validatedData.description !== undefined) updateData.description = validatedData.description;
-    if (validatedData.developer !== undefined) updateData.developer = validatedData.developer;
-    if (validatedData.publisher !== undefined) updateData.publisher = validatedData.publisher;
     if (validatedData.releaseYear !== undefined) updateData.releaseYear = validatedData.releaseYear;
     if (validatedData.coverImageUrl !== undefined) updateData.coverImageUrl = validatedData.coverImageUrl;
-    if (validatedData.submittedBy !== undefined) updateData.submittedBy = validatedData.submittedBy;
 
     const submission = await prisma.gameSubmission.update({
       where: { id },

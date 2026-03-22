@@ -62,7 +62,6 @@ model Photo {
   qualityLevelId  String
   qualityLevel    QualityLevel     @relation(fields: [qualityLevelId], references: [id])
   imageUrl        String
-  description     String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   submission      PhotoSubmission?
@@ -74,15 +73,10 @@ model GameSubmission {
   id              String   @id @default(cuid())
   name            String
   slug            String   @unique
-  description     String?
-  developer       String?
-  publisher       String?
   releaseYear     Int?
   coverImageUrl   String?
-  submittedBy     String?  // Optional email/name
   status          String   @default("PENDING") // PENDING, APPROVED, REJECTED
   reviewedAt      DateTime?
-  reviewedBy      String?  // Admin user ID (for future auth)
   rejectionReason String?
   gameId          String?  // Link to created game if approved
   game            Game?    @relation(fields: [gameId], references: [id])
@@ -101,11 +95,8 @@ model PhotoSubmission {
   qualityLevelId  String?
   qualityLevel    QualityLevel? @relation(fields: [qualityLevelId], references: [id])
   imageUrl        String
-  description     String?
-  submittedBy     String?
   status          String    @default("PENDING") // PENDING, APPROVED, REJECTED
   reviewedAt      DateTime?
-  reviewedBy      String?
   rejectionReason String?
   photoId         String?   @unique // Link to created photo if approved
   photo           Photo?    @relation(fields: [photoId], references: [id])

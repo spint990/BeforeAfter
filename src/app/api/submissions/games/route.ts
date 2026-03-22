@@ -16,12 +16,8 @@ const createGameSubmissionSchema = z.object({
     .max(255, "Slug is too long")
     .regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens")
     .optional(),
-  description: z.string().max(2000, "Description is too long").optional(),
-  developer: z.string().max(255, "Developer name is too long").optional(),
-  publisher: z.string().max(255, "Publisher name is too long").optional(),
   releaseYear: z.number().int().min(1970).max(new Date().getFullYear() + 5).optional(),
   coverImageUrl: z.string().url("Cover image must be a valid URL").optional().or(z.literal("")),
-  submittedBy: z.string().max(255, "Submitter name is too long").optional(),
 });
 
 // Helper function to generate slug from name
@@ -131,12 +127,8 @@ export async function POST(request: NextRequest) {
       data: {
         name: validatedData.name,
         slug,
-        description: validatedData.description || null,
-        developer: validatedData.developer || null,
-        publisher: validatedData.publisher || null,
         releaseYear: validatedData.releaseYear || null,
         coverImageUrl: validatedData.coverImageUrl || null,
-        submittedBy: validatedData.submittedBy || null,
         status: "PENDING",
       },
     });

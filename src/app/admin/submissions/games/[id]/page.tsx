@@ -10,13 +10,9 @@ interface GameSubmission {
   id: string;
   name: string;
   slug: string;
-  description: string | null;
-  developer: string | null;
-  publisher: string | null;
   releaseYear: number | null;
   coverImageUrl: string | null;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  submittedBy: string | null;
   rejectionReason: string | null;
   createdAt: string;
   updatedAt: string;
@@ -190,7 +186,7 @@ export default function GameSubmissionReviewPage() {
         <div>
           <h1 className="text-2xl font-bold">Review Game Submission</h1>
           <p className="text-gray-400 mt-1">
-            Submitted by {submission.submittedBy || 'Anonymous'} on {new Date(submission.createdAt).toLocaleDateString()}
+            Submitted on {new Date(submission.createdAt).toLocaleDateString()}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -230,35 +226,11 @@ export default function GameSubmissionReviewPage() {
               </code>
             </div>
 
-            {/* Developer */}
-            {submission.developer && (
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Developer</label>
-                <p className="text-white">{submission.developer}</p>
-              </div>
-            )}
-
-            {/* Publisher */}
-            {submission.publisher && (
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Publisher</label>
-                <p className="text-white">{submission.publisher}</p>
-              </div>
-            )}
-
             {/* Release Year */}
             {submission.releaseYear && (
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-1">Release Year</label>
                 <p className="text-white">{submission.releaseYear}</p>
-              </div>
-            )}
-
-            {/* Description */}
-            {submission.description && (
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1">Description</label>
-                <p className="text-white whitespace-pre-wrap">{submission.description}</p>
               </div>
             )}
           </div>

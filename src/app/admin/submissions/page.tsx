@@ -14,7 +14,6 @@ interface GameSubmission {
   slug: string;
   status: string;
   createdAt: string;
-  submittedBy: string | null;
 }
 
 interface PhotoSubmission {
@@ -22,7 +21,6 @@ interface PhotoSubmission {
   imageUrl: string;
   status: string;
   createdAt: string;
-  submittedBy: string | null;
   game: { id: string; name: string; slug: string };
   parameter: { id: string; name: string } | null;
   qualityLevel: { id: string; level: string } | null;
@@ -183,7 +181,7 @@ export default function AdminSubmissionsDashboard() {
                     <div>
                       <p className="font-medium">{game.name}</p>
                       <p className="text-sm text-gray-500">
-                        Submitted by {game.submittedBy || 'Anonymous'} • {new Date(game.createdAt).toLocaleDateString()}
+                        {new Date(game.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-500/20 text-yellow-400">

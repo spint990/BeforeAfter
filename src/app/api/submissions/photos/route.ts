@@ -18,8 +18,6 @@ const customParameterSchema = z.object({
 const createPhotoSubmissionSchema = z.object({
   gameId: z.string().min(1, "Game ID is required"),
   imageUrl: z.string().url("Image URL must be a valid URL"),
-  description: z.string().max(1000, "Description is too long").optional(),
-  submittedBy: z.string().max(255, "Submitter name is too long").optional(),
   // Either existing parameter or custom parameter
   parameterId: z.string().optional(),
   qualityLevelId: z.string().optional(),
@@ -165,8 +163,6 @@ export async function POST(request: NextRequest) {
         data: {
           gameId: validatedData.gameId,
           imageUrl: validatedData.imageUrl,
-          description: validatedData.description || null,
-          submittedBy: validatedData.submittedBy || null,
           status: "PENDING",
           // Custom parameter fields
           customParameterName: customParameter.name,
@@ -273,8 +269,6 @@ export async function POST(request: NextRequest) {
           parameterId: validatedData.parameterId,
           qualityLevelId: validatedData.qualityLevelId,
           imageUrl: validatedData.imageUrl,
-          description: validatedData.description || null,
-          submittedBy: validatedData.submittedBy || null,
           status: "PENDING",
         },
         include: {

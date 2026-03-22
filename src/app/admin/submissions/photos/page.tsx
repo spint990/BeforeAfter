@@ -7,9 +7,7 @@ import { useSearchParams } from 'next/navigation';
 interface PhotoSubmission {
   id: string;
   imageUrl: string;
-  description: string | null;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  submittedBy: string | null;
   createdAt: string;
   game: {
     id: string;

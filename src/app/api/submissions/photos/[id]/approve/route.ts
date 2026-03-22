@@ -119,7 +119,6 @@ export async function POST(
             parameterId: parameter.id,
             qualityLevelId: qualityLevel.id,
             imageUrl: submission.imageUrl,
-            description: submission.description,
           },
         });
 
@@ -169,7 +168,6 @@ export async function POST(
           parameterId: submission.parameterId!,
           qualityLevelId: submission.qualityLevelId!,
           imageUrl: submission.imageUrl,
-          description: submission.description,
         },
       });
 

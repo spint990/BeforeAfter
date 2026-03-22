@@ -9,8 +9,6 @@ const updatePhotoSubmissionSchema = z.object({
   parameterId: z.string().min(1, "Parameter ID is required").optional(),
   qualityLevelId: z.string().min(1, "Quality Level ID is required").optional(),
   imageUrl: z.string().url("Image URL must be a valid URL").optional(),
-  description: z.string().max(1000, "Description is too long").optional().nullable(),
-  submittedBy: z.string().max(255, "Submitter name is too long").optional().nullable(),
 });
 
 // GET /api/submissions/photos/[id] - Get a single photo submission
@@ -50,7 +48,6 @@ export async function GET(
           select: {
             id: true,
             imageUrl: true,
-            description: true,
             createdAt: true,
           },
         },
@@ -169,8 +166,6 @@ export async function PATCH(
     if (validatedData.parameterId !== undefined) updateData.parameterId = validatedData.parameterId;
     if (validatedData.qualityLevelId !== undefined) updateData.qualityLevelId = validatedData.qualityLevelId;
     if (validatedData.imageUrl !== undefined) updateData.imageUrl = validatedData.imageUrl;
-    if (validatedData.description !== undefined) updateData.description = validatedData.description;
-    if (validatedData.submittedBy !== undefined) updateData.submittedBy = validatedData.submittedBy;
 
     const submission = await prisma.photoSubmission.update({
       where: { id },

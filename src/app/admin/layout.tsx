@@ -38,17 +38,17 @@ function NavLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
     <Link
       href={item.href}
       className={`
-        flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all
+        flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all
         ${isActive
-          ? 'bg-accent-primary text-white'
-          : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+          ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-white border border-purple-500/30'
+          : 'text-gray-300 hover:bg-gray-800/50 hover:text-white border border-transparent'
         }
       `}
     >
       {item.icon}
       {item.label}
       {item.badge !== undefined && item.badge > 0 && (
-        <span className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold bg-red-500 text-white rounded-full">
+        <span className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full">
           {item.badge > 99 ? '99+' : item.badge}
         </span>
       )}
@@ -81,25 +81,25 @@ function AdminLayoutContent({
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-gray-800 border-b border-gray-700 z-40">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-gray-800/80 backdrop-blur-lg border-b border-gray-700/50 z-40">
         <div className="flex items-center justify-between h-full px-6">
           {/* Logo & Title */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-accent-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <span className="text-lg font-semibold text-white">Admin Panel</span>
+              <span className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Admin Panel</span>
             </div>
           </div>
 
           {/* Back to Site Link */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-300 hover:text-white bg-gray-700/50 hover:bg-gray-700 rounded-lg transition-all"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -112,7 +112,7 @@ function AdminLayoutContent({
       {/* Main Layout */}
       <div className="flex pt-16">
         {/* Sidebar */}
-        <aside className="fixed left-0 top-16 bottom-0 w-64 bg-gray-850 border-r border-gray-700 overflow-y-auto">
+        <aside className="fixed left-0 top-16 bottom-0 w-64 bg-gray-800/30 backdrop-blur-sm border-r border-gray-700/50 overflow-y-auto">
           <nav className="p-4 space-y-1">
             {navItems.map((item) => (
               <NavLink
@@ -124,9 +124,9 @@ function AdminLayoutContent({
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700/50">
             <div className="text-xs text-gray-500">
-              Before/After Admin
+              GFXLab Admin
             </div>
           </div>
         </aside>

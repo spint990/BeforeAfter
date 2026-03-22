@@ -70,7 +70,7 @@ export default function QuickCompareViewPage() {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-2 border-accent-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Loading comparison...</p>
         </div>
       </div>
@@ -79,7 +79,11 @@ export default function QuickCompareViewPage() {
 
   if (expired) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center py-8 px-4">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center py-8 px-4 relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl -z-10" />
+        
         <div className="text-center max-w-md">
           <div className="w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full flex items-center justify-center">
             <svg
@@ -102,7 +106,7 @@ export default function QuickCompareViewPage() {
           </p>
           <Link
             href="/compare/quick"
-            className="inline-block px-6 py-3 bg-accent-primary text-white font-semibold rounded-lg hover:bg-accent-primary/80 transition-colors"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-xl hover:from-cyan-400 hover:to-purple-400 transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25"
           >
             Create New Comparison
           </Link>
@@ -113,7 +117,11 @@ export default function QuickCompareViewPage() {
 
   if (error || !comparison) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center py-8 px-4">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center py-8 px-4 relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl -z-10" />
+        
         <div className="text-center max-w-md">
           <div className="w-16 h-16 mx-auto mb-6 bg-red-500/20 rounded-full flex items-center justify-center">
             <svg
@@ -136,7 +144,7 @@ export default function QuickCompareViewPage() {
           </p>
           <Link
             href="/compare/quick"
-            className="inline-block px-6 py-3 bg-accent-primary text-white font-semibold rounded-lg hover:bg-accent-primary/80 transition-colors"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-xl hover:from-cyan-400 hover:to-purple-400 transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25"
           >
             Create New Comparison
           </Link>
@@ -151,13 +159,20 @@ export default function QuickCompareViewPage() {
   const hoursRemaining = Math.max(0, Math.floor((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60)));
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 px-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gray-900 py-8 px-4 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -z-10" />
+      
+      <div className="max-w-5xl mx-auto relative">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <div className="text-center sm:text-left">
-            <h1 className="text-2xl font-bold text-white mb-1">Quick Comparison</h1>
-            <p className="text-sm text-gray-400">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-1">
+              Quick Comparison
+            </h1>
+            <p className="text-sm text-gray-400 flex items-center gap-2 justify-center sm:justify-start">
+              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
               Expires in {hoursRemaining} hour{hoursRemaining !== 1 ? 's' : ''}
             </p>
           </div>
@@ -166,7 +181,7 @@ export default function QuickCompareViewPage() {
             {/* Share Button */}
             <button
               onClick={handleCopyUrl}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 text-gray-300 rounded-xl transition-all hover:border-cyan-500/30"
             >
               {copied ? (
                 <>
@@ -193,7 +208,7 @@ export default function QuickCompareViewPage() {
             {/* New Comparison Link */}
             <Link
               href="/compare/quick"
-              className="flex items-center gap-2 px-4 py-2 bg-accent-primary hover:bg-accent-primary/80 text-white rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white rounded-xl transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/25"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -204,7 +219,7 @@ export default function QuickCompareViewPage() {
         </div>
 
         {/* Comparison Slider */}
-        <div className="rounded-xl overflow-hidden bg-gray-800 shadow-xl">
+        <div className="rounded-2xl overflow-hidden bg-gray-800/50 border border-gray-700/50 shadow-2xl shadow-cyan-500/5">
           <ImageComparisonSlider
             leftImage={comparison.beforeUrl}
             rightImage={comparison.afterUrl}
@@ -218,8 +233,8 @@ export default function QuickCompareViewPage() {
         <div className="mt-6 text-center text-sm text-gray-500">
           <p>
             Created with{' '}
-            <Link href="/" className="text-accent-primary hover:underline">
-              BeforeAfter
+            <Link href="/" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+              GFXLab
             </Link>
             {' '}• Quick comparisons expire after 24 hours
           </p>

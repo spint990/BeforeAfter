@@ -8,7 +8,7 @@ export default function AdminGamesLoading() {
       </div>
 
       {/* Table Skeleton */}
-      <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
         {/* Table Header */}
         <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-700 bg-gray-800/50">
           <div className="h-4 bg-gray-700 rounded w-20"></div>

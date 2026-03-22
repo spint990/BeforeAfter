@@ -211,7 +211,7 @@ export default function ParameterManager({
 
       {/* Add New Parameter Form */}
       {isAdding && (
-        <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 space-y-4">
+        <div className="p-4 bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
               label="Name"
@@ -258,7 +258,7 @@ export default function ParameterManager({
           {parameters.map((parameter) => (
             <div
               key={parameter.id}
-              className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden"
+              className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden"
             >
               {/* Parameter Header */}
               <div className="p-4 flex items-center justify-between">

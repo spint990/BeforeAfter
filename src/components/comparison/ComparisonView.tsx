@@ -85,7 +85,7 @@ export default function ComparisonView({
       {/* Game Header */}
       <div className="flex flex-col sm:flex-row gap-4 sm:items-start">
         {/* Game Cover Image */}
-        <div className="relative w-24 h-32 sm:w-28 sm:h-36 rounded-lg overflow-hidden bg-gray-800 flex-shrink-0 border border-gray-700">
+        <div className="relative w-24 h-32 sm:w-28 sm:h-36 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0 border border-gray-700/50 shadow-lg shadow-purple-500/5">
           {game.coverImage ? (
             <Image
               src={game.coverImage}
@@ -119,11 +119,11 @@ export default function ComparisonView({
           <div className="flex items-center gap-2 text-sm text-gray-400 mb-2">
             <Link
               href="/games"
-              className="hover:text-white transition-colors"
+              className="hover:text-purple-400 transition-colors"
             >
               Games
             </Link>
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -134,13 +134,15 @@ export default function ComparisonView({
           </div>
 
           {/* Game Name */}
-          <h1 className="text-3xl font-bold">{game.name}</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            {game.name}
+          </h1>
         </div>
 
         {/* Back Link */}
         <Link
           href="/games"
-          className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors text-sm self-start"
+          className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 hover:border-purple-500/30 rounded-xl transition-all text-sm self-start"
         >
           <svg
             className="w-4 h-4"
@@ -180,7 +182,7 @@ export default function ComparisonView({
         }`}
       >
         {game.parameters.length === 0 ? (
-          <div className="w-full aspect-video rounded-xl bg-gray-800/50 border border-gray-700 flex flex-col items-center justify-center gap-4 p-8">
+          <div className="w-full aspect-video rounded-2xl bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 flex flex-col items-center justify-center gap-4 p-8">
             <svg
               className="w-16 h-16 text-gray-500"
               fill="none"
@@ -204,13 +206,13 @@ export default function ComparisonView({
             </div>
             <Link
               href="/admin"
-              className="px-4 py-2 bg-accent-primary hover:bg-accent-primary/80 rounded-lg transition-colors text-sm"
+              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 rounded-xl transition-all text-sm hover:scale-105"
             >
               Go to Admin
             </Link>
           </div>
         ) : availableLevels.length < 2 ? (
-          <div className="w-full aspect-video rounded-xl bg-gray-800/50 border border-gray-700 flex flex-col items-center justify-center gap-4 p-8">
+          <div className="w-full aspect-video rounded-2xl bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 flex flex-col items-center justify-center gap-4 p-8">
             <svg
               className="w-16 h-16 text-gray-500"
               fill="none"
@@ -235,7 +237,7 @@ export default function ComparisonView({
             </div>
             <Link
               href="/admin"
-              className="px-4 py-2 bg-accent-primary hover:bg-accent-primary/80 rounded-lg transition-colors text-sm"
+              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 rounded-xl transition-all text-sm hover:scale-105"
             >
               Go to Admin
             </Link>
@@ -246,7 +248,7 @@ export default function ComparisonView({
             rightImage={rightImage}
             leftLabel={leftLevel}
             rightLabel={rightLevel}
-            className="w-full rounded-xl border border-gray-700"
+            className="w-full rounded-2xl border border-gray-700/50 shadow-2xl shadow-purple-500/5"
           />
         )}
       </div>

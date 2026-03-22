@@ -138,7 +138,7 @@ export default function GameSubmissionReviewPage() {
       <div className="max-w-4xl animate-pulse">
         <div className="h-6 bg-gray-700 rounded w-48 mb-6"></div>
         <div className="h-10 bg-gray-700 rounded w-64 mb-8"></div>
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
           <div className="space-y-6">
             <div className="h-10 bg-gray-700 rounded"></div>
             <div className="h-10 bg-gray-700 rounded"></div>
@@ -153,7 +153,7 @@ export default function GameSubmissionReviewPage() {
     return (
       <div className="text-center py-12">
         <p className="text-gray-400">Submission not found</p>
-        <Link href="/admin/submissions/games" className="text-accent-primary hover:text-accent-primary/80 mt-2 inline-block">
+        <Link href="/admin/submissions/games" className="text-purple-400 hover:text-purple-300 mt-2 inline-block">
           ← Back to Game Submissions
         </Link>
       </div>
@@ -199,7 +199,7 @@ export default function GameSubmissionReviewPage() {
       </div>
 
       {/* Submission Details */}
-      <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden mb-6">
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden mb-6">
         <div className="p-6 border-b border-gray-700">
           <h2 className="text-lg font-semibold mb-4">Game Information</h2>
           
@@ -243,7 +243,7 @@ export default function GameSubmissionReviewPage() {
 
       {/* Approval/Rejection History */}
       {submission.status !== 'PENDING' && (
-        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden mb-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden mb-6">
           <div className="p-6">
             <h2 className="text-lg font-semibold mb-4">Review History</h2>
             
@@ -260,7 +260,7 @@ export default function GameSubmissionReviewPage() {
                 </p>
                 <Link
                   href={`/admin/games/${submission.game.id}`}
-                  className="inline-flex items-center gap-2 text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -339,7 +339,7 @@ export default function GameSubmissionReviewPage() {
       {/* Reject Modal */}
       {rejectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 animate-fade-in">
+          <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700/50 max-w-md w-full p-6 animate-fade-in">
             {/* Header */}
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
@@ -360,7 +360,7 @@ export default function GameSubmissionReviewPage() {
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
               placeholder="Enter rejection reason..."
-              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent resize-none"
+              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 resize-none"
               rows={4}
             />
 

@@ -156,8 +156,8 @@ export default function PhotoSubmissionReviewPage() {
         <div className="h-6 bg-gray-700 rounded w-48 mb-6"></div>
         <div className="h-10 bg-gray-700 rounded w-64 mb-8"></div>
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 h-96"></div>
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6 h-96"></div>
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="h-6 bg-gray-700 rounded"></div>
@@ -173,7 +173,7 @@ export default function PhotoSubmissionReviewPage() {
     return (
       <div className="text-center py-12">
         <p className="text-gray-400">Submission not found</p>
-        <Link href="/admin/submissions/photos" className="text-accent-primary hover:text-accent-primary/80 mt-2 inline-block">
+        <Link href="/admin/submissions/photos" className="text-purple-400 hover:text-purple-300 mt-2 inline-block">
           ← Back to Photo Submissions
         </Link>
       </div>
@@ -227,7 +227,7 @@ export default function PhotoSubmissionReviewPage() {
       {/* Main Content */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Image Preview */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
           <div className="p-4 border-b border-gray-700">
             <h2 className="text-lg font-semibold">Image Preview</h2>
           </div>
@@ -271,7 +271,7 @@ export default function PhotoSubmissionReviewPage() {
         {/* Submission Details */}
         <div className="space-y-6">
           {/* Game Info */}
-          <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
             <div className="p-4 border-b border-gray-700">
               <h2 className="text-lg font-semibold">Submission Details</h2>
             </div>
@@ -281,7 +281,7 @@ export default function PhotoSubmissionReviewPage() {
                 <Link
                   href={`/games/${submission.game.slug}`}
                   target="_blank"
-                  className="text-white hover:text-accent-primary transition-colors"
+                  className="text-white hover:text-purple-400 transition-colors"
                 >
                   {submission.game.name}
                 </Link>
@@ -344,7 +344,7 @@ export default function PhotoSubmissionReviewPage() {
 
           {/* Approval/Rejection History */}
           {submission.status !== 'PENDING' && (
-            <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
               <div className="p-4 border-b border-gray-700">
                 <h2 className="text-lg font-semibold">Review History</h2>
               </div>
@@ -364,7 +364,7 @@ export default function PhotoSubmissionReviewPage() {
                       <Link
                         href={`/games/${submission.game.slug}?param=${submission.parameter.slug}`}
                         target="_blank"
-                        className="inline-flex items-center gap-2 text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+                        className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -453,7 +453,7 @@ export default function PhotoSubmissionReviewPage() {
         >
           <button
             onClick={() => setShowFullscreen(false)}
-            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-white hover:bg-gray-800 rounded-lg transition-colors"
+            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-white hover:bg-gray-800/80 backdrop-blur-sm rounded-xl transition-colors border border-transparent hover:border-gray-700/50"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -470,7 +470,7 @@ export default function PhotoSubmissionReviewPage() {
       {/* Reject Modal */}
       {rejectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 animate-fade-in">
+          <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700/50 max-w-md w-full p-6 animate-fade-in">
             {/* Header */}
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
@@ -491,7 +491,7 @@ export default function PhotoSubmissionReviewPage() {
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value)}
               placeholder="Enter rejection reason..."
-              className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent resize-none"
+              className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 resize-none"
               rows={4}
             />
 

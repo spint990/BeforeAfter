@@ -54,13 +54,13 @@ export default function GameDetailError({
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={reset}
-          className="px-6 py-2.5 bg-accent-primary hover:bg-accent-primary/80 rounded-lg transition-colors font-medium"
+          className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 rounded-xl transition-all font-medium shadow-lg shadow-purple-500/25"
         >
           Try Again
         </button>
         <Link
           href="/games"
-          className="px-6 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors font-medium text-center"
+          className="px-6 py-2.5 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 hover:border-gray-500/50 rounded-xl transition-all font-medium text-center"
         >
           Back to Games
         </Link>

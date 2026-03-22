@@ -65,7 +65,7 @@ export default function DeleteConfirmModal({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
       onClick={handleBackdropClick}
     >
-      <div className="bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 animate-fade-in">
+      <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-xl border border-gray-700/50 max-w-md w-full p-6 animate-fade-in">
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">

@@ -137,11 +137,11 @@ export default function ImageUploader({
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         className={`
-          relative w-full aspect-video rounded-lg border-2 border-dashed cursor-pointer
+          relative w-full aspect-video rounded-xl border-2 border-dashed cursor-pointer
           transition-all duration-200 overflow-hidden
           ${isDragging 
-            ? 'border-accent-primary bg-accent-primary/10' 
-            : 'border-gray-600 hover:border-gray-500 bg-gray-800/50'
+            ? 'border-purple-500 bg-purple-500/10' 
+            : 'border-gray-700/50 hover:border-gray-600/50 bg-gray-800/30'
           }
           ${isUploading ? 'pointer-events-none' : ''}
         `}
@@ -163,7 +163,7 @@ export default function ImageUploader({
         `}>
           {isUploading ? (
             <div className="text-center">
-              <div className="w-10 h-10 border-2 border-accent-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <div className="w-10 h-10 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <p className="text-sm text-gray-300">{uploadProgress}%</p>
             </div>
           ) : (
@@ -192,7 +192,7 @@ export default function ImageUploader({
         {isUploading && uploadProgress > 0 && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
             <div
-              className="h-full bg-accent-primary transition-all duration-200"
+              className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all duration-200"
               style={{ width: `${uploadProgress}%` }}
             />
           </div>
@@ -211,7 +211,7 @@ export default function ImageUploader({
 
       {/* Error Message */}
       {error && (
-        <p className="text-sm text-accent-danger">{error}</p>
+        <p className="text-sm text-red-400">{error}</p>
       )}
     </div>
   );

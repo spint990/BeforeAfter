@@ -66,7 +66,7 @@ export default function RootLayout({
                 </Link>
                 <Link
                   href="/admin"
-                  className="ml-2 px-4 py-2 text-sm font-medium text-gray-300 transition-all rounded-lg border border-gray-700 hover:border-purple-500/50 hover:text-white hover:bg-gray-800/50"
+                  className="ml-2 px-4 py-2 text-sm font-medium text-gray-300 transition-all rounded-xl border border-gray-700/50 hover:border-purple-500/50 hover:text-white hover:bg-gray-800/50"
                 >
                   Admin
                 </Link>

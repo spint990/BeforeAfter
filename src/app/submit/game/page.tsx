@@ -105,9 +105,9 @@ export default function GameSubmissionForm() {
             Thank you for submitting <span className="text-white font-medium">{name}</span>. 
             Our team will review your submission and approve it if it meets our guidelines.
           </p>
-          <div className="bg-accent-primary/10 border border-accent-primary/30 rounded-lg p-4 mb-6 text-left">
+          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 mb-6 text-left">
             <p className="text-sm text-gray-400">
-              <span className="text-accent-primary font-medium">What happens next?</span>
+              <span className="text-purple-400 font-medium">What happens next?</span>
               <br />
               Our admin team will review your submission. If approved, the game will appear 
               in our database. If you provided an email, you'll be notified of the decision.
@@ -199,10 +199,10 @@ export default function GameSubmissionForm() {
 
         {/* Error Message */}
         {submitError && (
-          <div className="bg-accent-danger/10 border border-accent-danger/30 rounded-lg p-4">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
             <div className="flex items-start gap-3">
               <svg
-                className="w-5 h-5 text-accent-danger flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -214,7 +214,7 @@ export default function GameSubmissionForm() {
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <p className="text-sm text-accent-danger">{submitError}</p>
+              <p className="text-sm text-red-400">{submitError}</p>
             </div>
           </div>
         )}
@@ -240,9 +240,9 @@ export default function GameSubmissionForm() {
         </div>
 
         {/* Notice */}
-        <div className="bg-gray-800/30 border border-gray-700/50 rounded-lg p-4 text-sm text-gray-400">
+        <div className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4 text-sm text-gray-400">
           <p>
-            <span className="text-accent-primary font-medium">Note:</span> Your submission will be 
+            <span className="text-purple-400 font-medium">Note:</span> Your submission will be 
             reviewed by our team before being published to the database. This typically takes 1-2 business days.
           </p>
         </div>

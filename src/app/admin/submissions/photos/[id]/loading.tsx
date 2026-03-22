@@ -24,7 +24,7 @@ export default function PhotoSubmissionReviewLoading() {
       {/* Main Content */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Image Preview skeleton */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
           <div className="p-4 border-b border-gray-700">
             <div className="h-6 bg-gray-700 rounded w-32"></div>
           </div>
@@ -37,7 +37,7 @@ export default function PhotoSubmissionReviewLoading() {
         {/* Submission Details skeleton */}
         <div className="space-y-6">
           {/* Details card */}
-          <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
             <div className="p-4 border-b border-gray-700">
               <div className="h-6 bg-gray-700 rounded w-40"></div>
             </div>

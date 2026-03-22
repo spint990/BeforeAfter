@@ -183,12 +183,12 @@ export default async function Home() {
         {/* Quick Compare Card */}
         <Link
           href="/compare/quick"
-          className="group relative overflow-hidden bg-gray-800 rounded-2xl p-6 border border-gray-700 hover:border-accent-primary/50 transition-all duration-300"
+          className="group relative overflow-hidden bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-accent-primary/10 rounded-full blur-2xl group-hover:bg-accent-primary/20 transition-colors" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-colors" />
           <div className="relative z-10">
-            <div className="w-12 h-12 bg-accent-primary/20 rounded-xl flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
@@ -196,7 +196,7 @@ export default async function Home() {
             <p className="text-gray-400">
               Upload and compare any two images instantly. Perfect for quick quality comparisons without setting up a full game entry.
             </p>
-            <div className="mt-4 flex items-center text-accent-primary font-medium">
+            <div className="mt-4 flex items-center text-purple-400 font-medium">
               Start Comparing
               <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -208,12 +208,12 @@ export default async function Home() {
         {/* Community Submissions Card */}
         <Link
           href="/submit"
-          className="group relative overflow-hidden bg-gray-800 rounded-2xl p-6 border border-gray-700 hover:border-accent-secondary/50 transition-all duration-300"
+          className="group relative overflow-hidden bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-300"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-accent-secondary/10 rounded-full blur-2xl group-hover:bg-accent-secondary/20 transition-colors" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-colors" />
           <div className="relative z-10">
-            <div className="w-12 h-12 bg-accent-secondary/20 rounded-xl flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-accent-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             </div>
@@ -221,7 +221,7 @@ export default async function Home() {
             <p className="text-gray-400">
               Contribute to our collection! Submit new games or upload comparison photos to help grow our database.
             </p>
-            <div className="mt-4 flex items-center text-accent-secondary font-medium">
+            <div className="mt-4 flex items-center text-cyan-400 font-medium">
               Submit Content
               <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -245,7 +245,7 @@ export default async function Home() {
           {games.length > 0 && (
             <Link
               href="/games"
-              className="hidden sm:flex items-center gap-2 text-accent-primary hover:text-accent-secondary transition-colors font-medium"
+              className="hidden sm:flex items-center gap-2 text-purple-400 hover:text-cyan-400 transition-colors font-medium"
             >
               View All Games
               <svg
@@ -281,7 +281,7 @@ export default async function Home() {
             <div className="mt-6 sm:hidden">
               <Link
                 href="/games"
-                className="flex items-center justify-center gap-2 text-accent-primary hover:text-accent-secondary transition-colors font-medium"
+                className="flex items-center justify-center gap-2 text-purple-400 hover:text-cyan-400 transition-colors font-medium"
               >
                 View All Games
                 <svg
@@ -301,7 +301,7 @@ export default async function Home() {
             </div>
           </>
         ) : (
-          <div className="text-center py-16 bg-gray-800/50 rounded-xl border border-gray-700">
+          <div className="text-center py-16 bg-gray-800/50 rounded-xl border border-gray-700/50">
             <svg
               className="w-16 h-16 text-gray-500 mx-auto mb-4"
               fill="none"
@@ -321,7 +321,7 @@ export default async function Home() {
             </p>
             <Link
               href="/admin"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent-primary text-white rounded-lg font-medium hover:bg-accent-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-cyan-500 text-white rounded-xl font-medium hover:from-purple-400 hover:to-cyan-400 transition-all shadow-lg shadow-purple-500/25"
             >
               <svg
                 className="w-5 h-5"

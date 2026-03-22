@@ -62,12 +62,12 @@ export async function generateMetadata({ params }: PageProps) {
 
   if (!game) {
     return {
-      title: 'Game Not Found - Before/After',
+      title: 'Game Not Found - GFXLab',
     };
   }
 
   return {
-    title: `${game.name} - Graphics Comparison - Before/After`,
+    title: `${game.name} - Graphics Comparison - GFXLab`,
     description: `Compare ${game.name} graphics settings side-by-side. ${game.parameters.length} parameters available for comparison.`,
   };
 }

@@ -80,7 +80,7 @@ export default function AdminSubmissionsDashboard() {
         <h1 className="text-2xl font-bold">Submissions Dashboard</h1>
         <div className="grid gap-4 sm:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-gray-800 rounded-lg p-6 border border-gray-700 animate-pulse">
+            <div key={i} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50 animate-pulse">
               <div className="h-4 bg-gray-700 rounded w-24 mb-2"></div>
               <div className="h-8 bg-gray-700 rounded w-16"></div>
             </div>
@@ -103,7 +103,7 @@ export default function AdminSubmissionsDashboard() {
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
         {/* Total Games */}
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
               <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,10 +120,10 @@ export default function AdminSubmissionsDashboard() {
         {/* Pending Games */}
         <Link
           href="/admin/submissions/games?status=PENDING"
-          className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-accent-primary transition-colors"
+          className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50 hover:border-purple-500/50 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center">
               <svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
               </svg>
@@ -138,7 +138,7 @@ export default function AdminSubmissionsDashboard() {
         {/* Pending Photos */}
         <Link
           href="/admin/submissions/photos?status=PENDING"
-          className="bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-accent-primary transition-colors"
+          className="bg-gray-800/50 rounded-xl p-6 border border-gray-700/50 hover:border-purple-500/50 transition-colors"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
@@ -157,12 +157,12 @@ export default function AdminSubmissionsDashboard() {
       {/* Pending Submissions */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Pending Game Submissions */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700">
-          <div className="flex items-center justify-between p-4 border-b border-gray-700">
+        <div className="bg-gray-800/50 rounded-xl border border-gray-700/50">
+          <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
             <h2 className="text-lg font-semibold">Pending Game Submissions</h2>
             <Link
               href="/admin/submissions/games?status=PENDING"
-              className="text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+              className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
             >
               View All →
             </Link>
@@ -176,7 +176,7 @@ export default function AdminSubmissionsDashboard() {
                   <Link
                     key={game.id}
                     href={`/admin/submissions/games/${game.id}`}
-                    className="flex items-center justify-between p-3 bg-gray-750 rounded-lg hover:bg-gray-700 transition-colors"
+                    className="flex items-center justify-between p-3 bg-gray-750/50 rounded-xl hover:bg-gray-700/50 transition-colors"
                   >
                     <div>
                       <p className="font-medium">{game.name}</p>
@@ -195,12 +195,12 @@ export default function AdminSubmissionsDashboard() {
         </div>
 
         {/* Pending Photo Submissions */}
-        <div className="bg-gray-800 rounded-lg border border-gray-700">
-          <div className="flex items-center justify-between p-4 border-b border-gray-700">
+        <div className="bg-gray-800/50 rounded-xl border border-gray-700/50">
+          <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
             <h2 className="text-lg font-semibold">Pending Photo Submissions</h2>
             <Link
               href="/admin/submissions/photos?status=PENDING"
-              className="text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+              className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
             >
               View All →
             </Link>

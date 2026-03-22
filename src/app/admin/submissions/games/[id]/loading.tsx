@@ -28,7 +28,7 @@ export default function GameSubmissionReviewLoading() {
       </div>
 
       {/* Submission Details */}
-      <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden mb-6">
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden mb-6">
         <div className="p-6 border-b border-gray-700">
           <div className="h-6 bg-gray-700 rounded w-40 mb-4 animate-pulse"></div>
           

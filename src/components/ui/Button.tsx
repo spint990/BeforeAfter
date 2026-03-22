@@ -14,10 +14,10 @@ interface ButtonProps {
 }
 
 const variantStyles: Record<string, string> = {
-  primary: 'bg-accent-primary hover:bg-accent-primary/90 text-white focus:ring-accent-primary/50',
-  secondary: 'bg-gray-600 hover:bg-gray-500 text-white focus:ring-gray-500/50',
-  danger: 'bg-accent-danger hover:bg-accent-danger/90 text-white focus:ring-accent-danger/50',
-  ghost: 'bg-transparent hover:bg-gray-700 text-gray-100 focus:ring-gray-500/50',
+  primary: 'bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 text-white hover:shadow-lg hover:shadow-purple-500/25 focus:ring-purple-500/50',
+  secondary: 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 hover:border-gray-500 focus:ring-gray-500/50',
+  danger: 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 text-white hover:shadow-lg hover:shadow-red-500/25 focus:ring-red-500/50',
+  ghost: 'bg-transparent hover:bg-gray-800/50 text-gray-300 hover:text-white border border-gray-700/50 hover:border-gray-600 focus:ring-gray-500/50',
 };
 
 const sizeStyles: Record<string, string> = {
@@ -36,9 +36,9 @@ export default function Button({
   onClick,
   type = 'button',
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900';
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900';
   
-  const disabledStyles = 'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-opacity-100';
+  const disabledStyles = 'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-opacity-100 disabled:hover:shadow-none disabled:hover:scale-100';
 
   return (
     <button

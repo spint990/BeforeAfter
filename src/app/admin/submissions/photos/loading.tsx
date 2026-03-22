@@ -34,7 +34,7 @@ export default function PhotoSubmissionsLoading() {
       </div>
 
       {/* Table */}
-      <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
         <div className="p-4">
           <div className="space-y-4">
             {[1, 2, 3, 4, 5].map((i) => (

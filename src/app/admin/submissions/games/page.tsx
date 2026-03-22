@@ -109,21 +109,21 @@ export default function GameSubmissionsListPage() {
         </div>
         <Link
           href="/admin/submissions"
-          className="text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+          className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
         >
           ← Back to Dashboard
         </Link>
       </div>
 
       {/* Status Filter Tabs */}
-      <div className="flex gap-1 bg-gray-800 p-1 rounded-lg w-fit">
+      <div className="flex gap-1 bg-gray-800/50 p-1 rounded-xl w-fit">
         {(['ALL', 'PENDING', 'APPROVED', 'REJECTED'] as StatusFilter[]).map((status) => (
           <button
             key={status}
             onClick={() => setStatusFilter(status)}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
               statusFilter === status
-                ? 'bg-gray-700 text-white'
+                ? 'bg-gray-700/50 text-white'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -139,7 +139,7 @@ export default function GameSubmissionsListPage() {
 
       {/* Submissions Table */}
       {loading ? (
-        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
           <div className="p-4">
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
@@ -156,7 +156,7 @@ export default function GameSubmissionsListPage() {
           </div>
         </div>
       ) : submissions.length === 0 ? (
-        <div className="bg-gray-800 rounded-lg p-12 text-center border border-gray-700">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-12 text-center border border-gray-700/50">
           <svg className="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
           </svg>
@@ -168,7 +168,7 @@ export default function GameSubmissionsListPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-700 bg-gray-800/50">
@@ -216,7 +216,7 @@ export default function GameSubmissionsListPage() {
                       {submission.status === 'PENDING' && (
                         <Link
                           href={`/admin/submissions/games/${submission.id}`}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-accent-primary hover:bg-accent-primary/90 text-white rounded-lg transition-colors"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 text-white rounded-lg transition-colors"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

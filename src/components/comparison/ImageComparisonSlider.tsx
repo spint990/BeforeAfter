@@ -109,7 +109,7 @@ function FullscreenModal({
         
         <div className="flex items-center gap-3">
           {/* Zoom Controls */}
-          <div className="flex items-center gap-2 bg-gray-800 rounded-lg px-2 py-1">
+          <div className="flex items-center gap-2 bg-gray-800/80 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-gray-700/50">
             <button
               onClick={handleZoomOut}
               className="w-8 h-8 flex items-center justify-center text-white hover:bg-gray-700 rounded transition-colors"
@@ -139,7 +139,7 @@ function FullscreenModal({
           
           <button
             onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center text-white hover:bg-gray-800 rounded-lg transition-colors"
+            className="w-10 h-10 flex items-center justify-center text-white hover:bg-gray-800/80 backdrop-blur-sm rounded-xl transition-colors border border-transparent hover:border-gray-700/50"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

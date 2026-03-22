@@ -4,8 +4,8 @@ export default function QuickCompareLoading() {
       <div className="max-w-4xl mx-auto">
         {/* Header Skeleton */}
         <div className="text-center mb-8">
-          <div className="h-9 bg-gray-800 rounded-lg w-64 mx-auto mb-3 animate-pulse" />
-          <div className="h-5 bg-gray-800 rounded-lg w-96 mx-auto animate-pulse" />
+          <div className="h-9 bg-gray-800/50 rounded-xl w-64 mx-auto mb-3 animate-pulse" />
+          <div className="h-5 bg-gray-800/50 rounded-xl w-96 mx-auto animate-pulse" />
         </div>
 
         {/* Upload Areas Skeleton */}
@@ -17,7 +17,7 @@ export default function QuickCompareLoading() {
               <div className="h-6 bg-gray-800 rounded w-28 animate-pulse" />
             </div>
             <div className="aspect-video rounded-lg border-2 border-dashed border-gray-700 bg-gray-800/50 animate-pulse" />
-            <div className="mt-3 h-10 bg-gray-800 rounded-lg animate-pulse" />
+            <div className="mt-3 h-10 bg-gray-800/50 rounded-xl animate-pulse" />
           </div>
 
           {/* After Image Skeleton */}
@@ -27,13 +27,13 @@ export default function QuickCompareLoading() {
               <div className="h-6 bg-gray-800 rounded w-28 animate-pulse" />
             </div>
             <div className="aspect-video rounded-lg border-2 border-dashed border-gray-700 bg-gray-800/50 animate-pulse" />
-            <div className="mt-3 h-10 bg-gray-800 rounded-lg animate-pulse" />
+            <div className="mt-3 h-10 bg-gray-800/50 rounded-xl animate-pulse" />
           </div>
         </div>
 
         {/* Button Skeleton */}
         <div className="flex justify-center">
-          <div className="h-12 bg-gray-800 rounded-lg w-48 animate-pulse" />
+          <div className="h-12 bg-gray-800/50 rounded-xl w-48 animate-pulse" />
         </div>
       </div>
     </div>

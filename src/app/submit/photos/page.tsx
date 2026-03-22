@@ -376,9 +376,9 @@ export default function PhotoSubmissionForm() {
               : 'Your photo submission for '}
             <span className="text-white font-medium">{selectedGame?.name}</span> has been received.
           </p>
-          <div className="bg-accent-primary/10 border border-accent-primary/30 rounded-lg p-4 mb-6 text-left">
+          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 mb-6 text-left">
             <p className="text-sm text-gray-400">
-              <span className="text-accent-primary font-medium">Submission Details:</span>
+              <span className="text-purple-400 font-medium">Submission Details:</span>
               <br />
               <span className="text-gray-300">Game:</span> {selectedGame?.name}
               <br />
@@ -458,7 +458,7 @@ export default function PhotoSubmissionForm() {
                   className={`
                     w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm
                     ${currentStep >= s.step
-                      ? 'bg-accent-primary text-white'
+                      ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
                       : 'bg-gray-700 text-gray-400'
                     }
                   `}
@@ -479,7 +479,7 @@ export default function PhotoSubmissionForm() {
               </div>
               {index < 2 && (
                 <div className={`flex-1 h-0.5 mx-4 ${
-                  currentStep > s.step ? 'bg-accent-primary' : 'bg-gray-700'
+                  currentStep > s.step ? 'bg-gradient-to-r from-purple-500 to-cyan-500' : 'bg-gray-700'
                 }`} />
               )}
             </React.Fragment>
@@ -495,7 +495,7 @@ export default function PhotoSubmissionForm() {
             <h2 className="text-lg font-semibold text-white mb-4">Select a Game</h2>
             {loadingGames ? (
               <div className="flex items-center justify-center py-8">
-                <div className="w-8 h-8 border-2 border-accent-primary border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : games.length === 0 ? (
               <div className="text-center py-8">
@@ -541,10 +541,10 @@ export default function PhotoSubmissionForm() {
               <button
                 type="button"
                 onClick={() => setUseCustomParameter(false)}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition-all ${
                   !useCustomParameter
-                    ? 'bg-accent-primary text-white'
-                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                    ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white shadow-lg shadow-purple-500/25'
+                    : 'bg-gray-700/50 text-gray-400 hover:bg-gray-600/50 border border-gray-600/50'
                 }`}
               >
                 Existing Parameter
@@ -552,10 +552,10 @@ export default function PhotoSubmissionForm() {
               <button
                 type="button"
                 onClick={() => setUseCustomParameter(true)}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition-all ${
                   useCustomParameter
-                    ? 'bg-accent-primary text-white'
-                    : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                    ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white shadow-lg shadow-purple-500/25'
+                    : 'bg-gray-700/50 text-gray-400 hover:bg-gray-600/50 border border-gray-600/50'
                 }`}
               >
                 Create Custom
@@ -566,7 +566,7 @@ export default function PhotoSubmissionForm() {
               <>
                 {loadingParameters ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="w-8 h-8 border-2 border-accent-primary border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
                   </div>
                 ) : parameters.length === 0 ? (
                   <div className="text-center py-8">
@@ -594,7 +594,7 @@ export default function PhotoSubmissionForm() {
                     {selectedParameterId && (
                       loadingQualityLevels ? (
                         <div className="flex items-center justify-center py-4">
-                          <div className="w-6 h-6 border-2 border-accent-primary border-t-transparent rounded-full animate-spin" />
+                          <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
                         </div>
                       ) : qualityLevels.length === 0 ? (
                         <div className="text-center py-4">
@@ -654,13 +654,13 @@ export default function PhotoSubmissionForm() {
                 {/* Custom parameter options */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-200">
-                    Parameter Options <span className="text-accent-danger">*</span>
+                    Parameter Options <span className="text-red-400">*</span>
                   </label>
                   <p className="text-xs text-gray-500 mb-2">
                     Add the different settings/values for this parameter (e.g., Low, Medium, High). 
                     You will need to upload a photo for each option in the next step.
                   </p>
-                  
+                   
                   {customParameterOptions.map((option, index) => (
                     <div key={index} className="flex gap-2">
                       <input
@@ -668,13 +668,13 @@ export default function PhotoSubmissionForm() {
                         value={option}
                         onChange={(e) => updateCustomOption(index, e.target.value)}
                         placeholder={`Option ${index + 1}`}
-                        className="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-primary/50 focus:border-accent-primary hover:border-gray-500"
+                        className="flex-1 px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-xl text-gray-100 placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 hover:border-gray-600/50"
                       />
                       {customParameterOptions.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeCustomOption(index)}
-                          className="px-3 py-2 bg-accent-danger/20 text-accent-danger rounded-lg hover:bg-accent-danger/30 transition-colors"
+                          className="px-3 py-2 bg-red-500/20 text-red-400 rounded-xl hover:bg-red-500/30 transition-colors"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -687,7 +687,7 @@ export default function PhotoSubmissionForm() {
                   <button
                     type="button"
                     onClick={addCustomOption}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-700/50 text-gray-300 rounded-xl hover:bg-gray-600/50 border border-gray-600/50 transition-colors"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -696,13 +696,13 @@ export default function PhotoSubmissionForm() {
                   </button>
 
                   {errors.qualityLevel && (
-                    <p className="text-sm text-accent-danger mt-1">{errors.qualityLevel}</p>
+                    <p className="text-sm text-red-400 mt-1">{errors.qualityLevel}</p>
                   )}
                 </div>
 
                 {/* Summary */}
                 {customParameterName && validCustomOptions.length > 0 && (
-                  <div className="mt-4 p-4 bg-gray-700/30 rounded-lg">
+                  <div className="mt-4 p-4 bg-gray-700/30 rounded-xl">
                     <p className="text-sm text-gray-400">
                       You're creating a parameter with {validCustomOptions.length} options:
                       <br />
@@ -712,7 +712,7 @@ export default function PhotoSubmissionForm() {
                       <br />
                       <span className="text-gray-500">Options: {validCustomOptions.join(', ')}</span>
                       <br />
-                      <span className="text-accent-primary">You'll upload {validCustomOptions.length} photos in the next step.</span>
+                      <span className="text-purple-400">You'll upload {validCustomOptions.length} photos in the next step.</span>
                     </p>
                   </div>
                 )}
@@ -737,9 +737,9 @@ export default function PhotoSubmissionForm() {
                   </p>
                   
                   {validCustomOptions.map((option, index) => (
-                    <div key={option} className="space-y-2 p-4 bg-gray-700/20 rounded-lg border border-gray-600">
+                    <div key={option} className="space-y-2 p-4 bg-gray-700/20 rounded-xl border border-gray-600/50">
                       <label className="block text-sm font-medium text-white">
-                        Photo for "{option}" <span className="text-accent-danger">*</span>
+                        Photo for "{option}" <span className="text-red-400">*</span>
                       </label>
                       <p className="text-xs text-gray-500">
                         Upload a screenshot showing the "{option}" setting
@@ -750,7 +750,7 @@ export default function PhotoSubmissionForm() {
                         folder="comparisons"
                       />
                       {errors.image && !optionImages[option] && (
-                        <p className="text-sm text-accent-danger mt-1">
+                        <p className="text-sm text-red-400 mt-1">
                           Please upload a photo for "{option}"
                         </p>
                       )}
@@ -758,13 +758,13 @@ export default function PhotoSubmissionForm() {
                   ))}
 
                   {/* Progress indicator */}
-                  <div className="p-3 bg-gray-700/30 rounded-lg">
+                  <div className="p-3 bg-gray-700/30 rounded-xl">
                     <p className="text-sm text-gray-400">
                       Progress: {Object.keys(optionImages).filter(key => validCustomOptions.includes(key) && optionImages[key]).length} of {validCustomOptions.length} photos uploaded
                     </p>
                     <div className="mt-2 h-2 bg-gray-600 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-accent-primary transition-all duration-300"
+                        className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 transition-all duration-300"
                         style={{ 
                           width: `${(Object.keys(optionImages).filter(key => validCustomOptions.includes(key) && optionImages[key]).length / validCustomOptions.length) * 100}%` 
                         }}
@@ -773,7 +773,7 @@ export default function PhotoSubmissionForm() {
                   </div>
 
                   {/* Submission Summary */}
-                  <div className="p-4 bg-gray-700/30 rounded-lg border border-gray-600">
+                  <div className="p-4 bg-gray-700/30 rounded-xl border border-gray-600/50">
                     <h3 className="text-sm font-medium text-white mb-2">Submission Summary</h3>
                     <div className="space-y-1 text-sm text-gray-400">
                       <p><span className="text-gray-500">Game:</span> {selectedGame?.name}</p>
@@ -789,7 +789,7 @@ export default function PhotoSubmissionForm() {
                   {/* Image Upload */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-medium text-gray-200">
-                      Photo Upload <span className="text-accent-danger">*</span>
+                      Photo Upload <span className="text-red-400">*</span>
                     </label>
                     <p className="text-xs text-gray-500 mb-2">
                       Upload a high-quality comparison screenshot
@@ -800,12 +800,12 @@ export default function PhotoSubmissionForm() {
                       folder="comparisons"
                     />
                     {errors.image && (
-                      <p className="text-sm text-accent-danger mt-1">{errors.image}</p>
+                      <p className="text-sm text-red-400 mt-1">{errors.image}</p>
                     )}
                   </div>
 
                   {/* Submission Summary */}
-                  <div className="p-4 bg-gray-700/30 rounded-lg border border-gray-600">
+                  <div className="p-4 bg-gray-700/30 rounded-xl border border-gray-600/50">
                     <h3 className="text-sm font-medium text-white mb-2">Submission Summary</h3>
                     <div className="space-y-1 text-sm text-gray-400">
                       <p><span className="text-gray-500">Game:</span> {selectedGame?.name}</p>
@@ -821,10 +821,10 @@ export default function PhotoSubmissionForm() {
 
         {/* Error Message */}
         {submitError && (
-          <div className="bg-accent-danger/10 border border-accent-danger/30 rounded-lg p-4">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
             <div className="flex items-start gap-3">
               <svg
-                className="w-5 h-5 text-accent-danger flex-shrink-0 mt-0.5"
+                className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -836,7 +836,7 @@ export default function PhotoSubmissionForm() {
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <p className="text-sm text-accent-danger">{submitError}</p>
+              <p className="text-sm text-red-400">{submitError}</p>
             </div>
           </div>
         )}
@@ -892,9 +892,9 @@ export default function PhotoSubmissionForm() {
         </div>
 
         {/* Notice */}
-        <div className="bg-gray-800/30 border border-gray-700/50 rounded-lg p-4 text-sm text-gray-400">
+        <div className="bg-gray-800/30 border border-gray-700/50 rounded-xl p-4 text-sm text-gray-400">
           <p>
-            <span className="text-accent-primary font-medium">Note:</span> Your submission{useCustomParameter ? 's will be' : ' will be'} 
+            <span className="text-purple-400 font-medium">Note:</span> Your submission{useCustomParameter ? 's will be' : ' will be'} 
             reviewed by our team before being published. Please ensure your screenshot{useCustomParameter ? 's accurately' : ' accurately'} 
             represents the selected settings.
           </p>

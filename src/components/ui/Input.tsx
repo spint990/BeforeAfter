@@ -31,23 +31,23 @@ export default function Input({
 }: InputProps) {
   const inputId = id || name || label?.toLowerCase().replace(/\s+/g, '-');
   
-  const baseInputStyles = 'w-full px-4 py-2 bg-gray-800 border rounded-lg text-gray-100 placeholder-gray-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-primary/50';
+  const baseInputStyles = 'w-full px-4 py-2.5 bg-gray-800/50 border rounded-xl text-gray-100 placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50';
   
-  const normalBorderStyles = 'border-gray-600 hover:border-gray-500 focus:border-accent-primary';
+  const normalBorderStyles = 'border-gray-700/50 hover:border-gray-600/50 focus:border-purple-500/50';
   
-  const errorBorderStyles = 'border-accent-danger focus:border-accent-danger focus:ring-accent-danger/50';
+  const errorBorderStyles = 'border-red-500/50 focus:border-red-500 focus:ring-red-500/50';
   
-  const disabledStyles = 'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-700';
+  const disabledStyles = 'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-800/30';
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
         <label 
           htmlFor={inputId} 
-          className="text-sm font-medium text-gray-200"
+          className="text-sm font-medium text-gray-300"
         >
           {label}
-          {required && <span className="text-accent-danger ml-1">*</span>}
+          {required && <span className="text-red-400 ml-1">*</span>}
         </label>
       )}
       <input
@@ -66,7 +66,7 @@ export default function Input({
         `.trim().replace(/\s+/g, ' ')}
       />
       {error && (
-        <p className="text-sm text-accent-danger mt-1">{error}</p>
+        <p className="text-sm text-red-400 mt-1">{error}</p>
       )}
     </div>
   );

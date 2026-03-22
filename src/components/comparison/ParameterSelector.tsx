@@ -37,7 +37,7 @@ export default function ParameterSelector({
   }));
 
   return (
-    <div className="w-full bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700">
+    <div className="w-full bg-gray-800/30 backdrop-blur-sm rounded-2xl p-5 border border-gray-700/50">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Parameter Selector */}
         <Select
@@ -70,11 +70,11 @@ export default function ParameterSelector({
       {/* Visual indicator showing the comparison */}
       {leftLevel && rightLevel && (
         <div className="mt-4 flex items-center justify-center gap-3 text-sm text-gray-400">
-          <span className="px-3 py-1 bg-gray-700 rounded-full">
+          <span className="px-3 py-1.5 bg-gray-700/50 border border-gray-600/50 rounded-full">
             {leftLevel}
           </span>
           <svg 
-            className="w-5 h-5 text-accent-primary" 
+            className="w-5 h-5 text-purple-400" 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -86,7 +86,7 @@ export default function ParameterSelector({
               d="M13 7l5 5m0 0l-5 5m5-5H6" 
             />
           </svg>
-          <span className="px-3 py-1 bg-accent-primary/20 text-accent-primary rounded-full">
+          <span className="px-3 py-1.5 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-full">
             {rightLevel}
           </span>
         </div>

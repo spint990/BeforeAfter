@@ -10,7 +10,7 @@ export default function AdminLoading() {
       {/* Stats Skeleton */}
       <div className="grid gap-4 md:grid-cols-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-gray-800 rounded-lg p-6 border border-gray-700">
+          <div key={i} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gray-700"></div>
               <div>
@@ -34,7 +34,7 @@ export default function AdminLoading() {
           <div className="h-6 bg-gray-700 rounded w-32"></div>
           <div className="h-4 bg-gray-700 rounded w-20"></div>
         </div>
-        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 overflow-hidden">
           <div className="p-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex items-center justify-between py-3 border-b border-gray-700 last:border-0">

@@ -132,7 +132,7 @@ export default function EditGamePage() {
       <div className="max-w-4xl animate-pulse">
         <div className="h-6 bg-gray-700 rounded w-48 mb-6"></div>
         <div className="h-10 bg-gray-700 rounded w-64 mb-8"></div>
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
           <div className="space-y-6">
             <div className="h-10 bg-gray-700 rounded"></div>
             <div className="h-10 bg-gray-700 rounded"></div>
@@ -147,7 +147,7 @@ export default function EditGamePage() {
     return (
       <div className="text-center py-12">
         <p className="text-gray-400">Game not found</p>
-        <Link href="/admin/games" className="text-accent-primary hover:text-accent-primary/80 mt-2 inline-block">
+        <Link href="/admin/games" className="text-purple-400 hover:text-purple-300 mt-2 inline-block">
           ← Back to Games
         </Link>
       </div>
@@ -230,7 +230,7 @@ export default function EditGamePage() {
 
       {/* Tab Content */}
       {activeTab === 'details' && (
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
           <h2 className="text-lg font-semibold mb-4">Game Information</h2>
           <AdminGameForm
             initialData={{
@@ -252,13 +252,13 @@ export default function EditGamePage() {
       {activeTab === 'parameters' && (
         <div className="space-y-6">
           {/* Parameters Section */}
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Parameters</h2>
               <Link
                 href={`/games/${game.slug}`}
                 target="_blank"
-                className="text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+                className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
               >
                 Preview on Site →
               </Link>
@@ -277,7 +277,7 @@ export default function EditGamePage() {
                 {parameters.map((param) => (
                   <div
                     key={param.id}
-                    className="flex items-center justify-between p-4 bg-gray-750 rounded-lg border border-gray-700"
+                    className="flex items-center justify-between p-4 bg-gray-750/50 rounded-xl border border-gray-700/50"
                   >
                     <div>
                       <h3 className="font-medium">{param.name}</h3>
@@ -286,7 +286,7 @@ export default function EditGamePage() {
                     <Link
                       href={`/games/${game.slug}?param=${param.slug}`}
                       target="_blank"
-                      className="text-sm text-accent-primary hover:text-accent-primary/80 transition-colors"
+                      className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
                     >
                       View →
                     </Link>
@@ -297,7 +297,7 @@ export default function EditGamePage() {
           </div>
 
           {/* Parameter Manager */}
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
             <h2 className="text-lg font-semibold mb-4">Manage Parameters</h2>
             <ParameterManager
               gameId={game.id}

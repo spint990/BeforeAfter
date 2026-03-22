@@ -64,45 +64,118 @@ export default async function Home() {
   
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-accent-primary/20 via-background to-accent-secondary/20 py-20 px-4 sm:px-6 lg:px-8 rounded-2xl mb-12">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-accent-primary/30 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-secondary/30 rounded-full blur-3xl" />
+      {/* Hero Section - Redesigned */}
+      <section className="relative overflow-hidden rounded-3xl mb-12">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
         
-        <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
-            <span className="bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent">
-              Graphics Comparison Tool
-            </span>
-          </h1>
-          
-          <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-2xl animate-fade-in animation-delay-100">
-            Compare game graphics side by side. See the difference between quality settings with our interactive slider interface.
-          </p>
-          
-          <div className="flex flex-wrap gap-4 justify-center animate-fade-in animation-delay-200">
-            <Link
-              href="/games"
-              className="px-8 py-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-white rounded-xl font-semibold text-lg hover:opacity-90 transition-all duration-300 hover:scale-105 shadow-lg shadow-accent-primary/25"
-            >
-              Browse Games
-            </Link>
-            <Link
-              href="/compare/quick"
-              className="px-8 py-4 bg-gray-800 text-white rounded-xl font-semibold text-lg hover:bg-gray-700 transition-all duration-300 border border-gray-700 hover:border-gray-600"
-            >
-              Quick Compare
-            </Link>
-            <Link
-              href="/submit"
-              className="px-8 py-4 bg-gray-800 text-white rounded-xl font-semibold text-lg hover:bg-gray-700 transition-all duration-300 border border-gray-700 hover:border-gray-600"
-            >
-              Submit Content
-            </Link>
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
+        
+        {/* Glowing orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-purple-600/10 to-cyan-600/10 rounded-full blur-[100px]" />
+        
+        {/* Content */}
+        <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
+          <div className="max-w-6xl mx-auto">
+            {/* Logo and Brand */}
+            <div className="flex flex-col items-center text-center mb-10">
+              {/* Logo Icon */}
+              <div className="relative mb-6">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-500 p-[2px] shadow-2xl shadow-purple-500/25">
+                  <div className="w-full h-full rounded-2xl bg-gray-900 flex items-center justify-center">
+                    <svg className="w-10 h-10 sm:w-12 sm:h-12 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <rect x="3" y="3" width="7" height="18" rx="1" className="text-purple-400 fill-purple-400/20 stroke-purple-400" />
+                      <rect x="14" y="3" width="7" height="18" rx="1" className="text-cyan-400 fill-cyan-400/20 stroke-cyan-400" />
+                      <line x1="12" y1="2" x2="12" y2="22" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                </div>
+                {/* Glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-500 blur-xl opacity-50" />
+              </div>
+              
+              {/* Title */}
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-4">
+                <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
+                  GFX
+                </span>
+                <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                  Lab
+                </span>
+              </h1>
+              
+              {/* Tagline */}
+              <p className="text-lg sm:text-xl lg:text-2xl text-gray-400 max-w-2xl leading-relaxed">
+                The ultimate <span className="text-purple-400 font-semibold">graphics comparison</span> platform. 
+                Analyze visual differences with our precision <span className="text-cyan-400 font-semibold">slider technology</span>.
+              </p>
+            </div>
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+              <Link
+                href="/games"
+                className="group relative w-full sm:w-auto"
+              >
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-xl blur opacity-60 group-hover:opacity-100 transition duration-300" />
+                <div className="relative flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 rounded-xl font-semibold text-lg text-white group-hover:bg-gray-800 transition-colors">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  Browse Games
+                </div>
+              </Link>
+              
+              <Link
+                href="/compare/quick"
+                className="group w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 bg-gray-800/50 backdrop-blur-sm text-white rounded-xl font-semibold text-lg border border-gray-700 hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-300"
+              >
+                <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Quick Compare
+              </Link>
+              
+              <Link
+                href="/submit"
+                className="group w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 bg-gray-800/50 backdrop-blur-sm text-white rounded-xl font-semibold text-lg border border-gray-700 hover:border-cyan-500/50 hover:bg-gray-800 transition-all duration-300"
+              >
+                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Submit Content
+              </Link>
+            </div>
+            
+            {/* Stats badges */}
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-full border border-gray-700/50">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-gray-300">Interactive Slider</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-full border border-gray-700/50">
+                <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                <span className="text-gray-300">Side-by-Side Analysis</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-full border border-gray-700/50">
+                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="text-gray-300">Community Driven</span>
+              </div>
+            </div>
           </div>
         </div>
+        
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-900 to-transparent" />
       </section>
 
       {/* Feature Cards Section */}

@@ -45,19 +45,16 @@ export const updateParameterSchema = z.object({
 });
 
 // Quality Level validation schemas
-export const qualityLevelEnum = z.enum(["Low", "Medium", "High", "Ultra"], {
-  errorMap: () => ({ message: "Level must be one of: Low, Medium, High, Ultra" }),
-});
-
+// Level can be any string (custom levels allowed), not just predefined enum values
 export const createQualityLevelSchema = z.object({
-  level: qualityLevelEnum,
-  imageUrl: z.string().min(1, "Image URL is required"),
+  level: z.string().min(1, "Level name is required").max(100, "Level name is too long"),
+  imageUrl: z.string().url("Image URL must be a valid URL").nullable().optional(),
   parameterId: z.string().min(1, "Parameter ID is required"),
 });
 
 export const updateQualityLevelSchema = z.object({
-  level: qualityLevelEnum.optional(),
-  imageUrl: z.string().min(1, "Image URL is required").optional(),
+  level: z.string().min(1, "Level name is required").max(100, "Level name is too long").optional(),
+  imageUrl: z.string().url("Image URL must be a valid URL").nullable().optional(),
   parameterId: z.string().min(1, "Parameter ID is required").optional(),
 });
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { upload } from '@vercel/blob/client';
 
 interface ImageUploadState {
   url: string | null;
@@ -189,9 +190,9 @@ export default function QuickComparePage() {
     setImageState(prev => ({ ...prev, isUploading: true, progress: 0, error: null }));
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', 'comparison');
+      // Use Vercel Blob client-side upload to bypass server body size limits
+      const fileExtension = file.name.split('.').pop() || 'jpg';
+      const filename = `comparisons/${crypto.randomUUID()}.${fileExtension}`;
 
       // Simulate progress for better UX
       const progressInterval = setInterval(() => {
@@ -201,30 +202,19 @@ export default function QuickComparePage() {
         }));
       }, 100);
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      const blob = await upload(filename, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
       });
 
       clearInterval(progressInterval);
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Upload failed');
-      }
-
-      const data = await response.json();
-
-      if (data.success && data.url) {
-        setImageState({
-          url: data.url,
-          isUploading: false,
-          progress: 100,
-          error: null,
-        });
-      } else {
-        throw new Error('Invalid response from server');
-      }
+      setImageState({
+        url: blob.url,
+        isUploading: false,
+        progress: 100,
+        error: null,
+      });
     } catch (err) {
       setImageState(prev => ({
         ...prev,

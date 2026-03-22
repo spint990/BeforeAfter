@@ -1,75 +1,48 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
-import { randomUUID } from "crypto";
+import { handleUpload } from "@vercel/blob/client";
 import { logError } from "@/lib/error-utils";
 
 // Allowed file types
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
-// POST /api/upload - Handle image upload using Vercel Blob
+// POST /api/upload - Handle client-side upload via Vercel Blob
 export async function POST(request: NextRequest) {
   try {
-    // Check if BLOB_READ_WRITE_TOKEN is configured
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      logError("BLOB_READ_WRITE_TOKEN is not configured", new Error("Missing BLOB_READ_WRITE_TOKEN environment variable"));
-      return NextResponse.json(
-        { success: false, error: "Blob storage is not configured" },
-        { status: 500 }
-      );
-    }
+    const body = await request.json();
+    
+    // This handles the client-side upload flow from @vercel/blob/client
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async (pathname: string) => {
+        // Validate the file type from the pathname
+        const extension = pathname.split('.').pop()?.toLowerCase();
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+        
+        if (!extension || !allowedExtensions.includes(extension)) {
+          throw new Error('Invalid file type. Allowed: jpg, png, webp');
+        }
 
-    const formData = await request.formData();
-    const file = formData.get("file") as File | null;
-    const type = formData.get("type") as string | null;
-
-    // Validate file exists
-    if (!file) {
-      return NextResponse.json(
-        { success: false, error: "No file provided" },
-        { status: 400 }
-      );
-    }
-
-    // Validate file type
-    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid file type. Allowed: jpg, png, webp" },
-        { status: 400 }
-      );
-    }
-
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        { success: false, error: "File size exceeds 10MB limit" },
-        { status: 400 }
-      );
-    }
-
-    // Determine upload folder based on type
-    const uploadType = type === "cover" ? "covers" : "comparisons";
-
-    // Generate unique filename
-    const fileExtension = file.name.split(".").pop() || "jpg";
-    const uniqueFilename = `${uploadType}/${randomUUID()}.${fileExtension}`;
-
-    // Upload to Vercel Blob
-    const blob = await put(uniqueFilename, file, {
-      access: "public",
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+        return {
+          allowedContentTypes: ALLOWED_FILE_TYPES,
+          maximumSizeInBytes: MAX_FILE_SIZE,
+          tokenPayload: JSON.stringify({
+            // Add any additional metadata here
+          }),
+        };
+      },
     });
 
-    return NextResponse.json({
-      success: true,
-      url: blob.url,
-      filename: uniqueFilename,
-    });
+    return NextResponse.json(jsonResponse);
   } catch (error) {
-    logError("Error uploading file:", error);
+    logError("Error handling upload:", error);
+    
+    // Return proper JSON error response
+    const errorMessage = error instanceof Error ? error.message : "Failed to handle upload";
     return NextResponse.json(
-      { success: false, error: "Failed to upload file" },
-      { status: 500 }
+      { error: errorMessage },
+      { status: 400 }
     );
   }
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
+import { upload } from '@vercel/blob/client';
 
 interface ImageUploaderProps {
   onUpload: (url: string) => void;
@@ -29,37 +30,27 @@ export default function ImageUploader({
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', folder === 'covers' ? 'cover' : 'comparison');
+      // Use Vercel Blob client-side upload to bypass server body size limits
+      const uploadType = folder === 'covers' ? 'covers' : 'comparisons';
+      const fileExtension = file.name.split('.').pop() || 'jpg';
+      const filename = `${uploadType}/${crypto.randomUUID()}.${fileExtension}`;
 
-      // Simulate progress for better UX
+      // Simulate progress for better UX since onUploadProgress isn't available in this version
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => Math.min(prev + 10, 90));
       }, 100);
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      const blob = await upload(filename, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
       });
 
       clearInterval(progressInterval);
       setUploadProgress(100);
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Upload failed');
-      }
-
-      const data = await response.json();
-      
-      if (data.success && data.url) {
-        onUpload(data.url);
-      } else {
-        throw new Error('Invalid response from server');
-      }
+      onUpload(blob.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      const errorMessage = err instanceof Error ? err.message : 'Upload failed';
+      setError(errorMessage);
     } finally {
       setIsUploading(false);
       setTimeout(() => setUploadProgress(0), 500);

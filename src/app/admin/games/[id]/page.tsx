@@ -57,9 +57,12 @@ export default function EditGamePage() {
       const paramsResponse = await fetch(`/api/parameters?gameId=${params.id}`);
       const paramsData = await paramsResponse.json();
       
+      // The API returns { data: parameters }, so extract the data array
+      const parametersArray = paramsData.data || paramsData;
+      
       // Fetch quality levels for each parameter
       const paramsWithLevels = await Promise.all(
-        paramsData.map(async (param: Parameter) => {
+        parametersArray.map(async (param: Parameter) => {
           const qlResponse = await fetch(`/api/quality-levels?parameterId=${param.id}`);
           const qualityLevels = await qlResponse.json();
           return { ...param, qualityLevels };

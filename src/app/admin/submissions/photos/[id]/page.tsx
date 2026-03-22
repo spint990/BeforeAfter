@@ -81,7 +81,7 @@ export default function PhotoSubmissionReviewPage() {
         throw new Error(error.error || 'Failed to approve submission');
       }
 
-      router.push('/admin/submissions/photos');
+      router.push('/admin/submissions');
     } catch (error) {
       console.error('Error approving submission:', error);
       alert('Failed to approve submission');
@@ -112,7 +112,7 @@ export default function PhotoSubmissionReviewPage() {
       }
 
       setRejectModal(false);
-      router.push('/admin/submissions/photos');
+      router.push('/admin/submissions');
     } catch (error) {
       console.error('Error rejecting submission:', error);
       alert('Failed to reject submission');
